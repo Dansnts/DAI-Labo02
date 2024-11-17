@@ -1,0 +1,35 @@
+@startuml switchCombatProblem
+title "Problems related to switching in a combat"
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as giovanni
+== JOIN possible combats ==
+
+c1->s: JOIN giovanni
+s->c1: OK
+
+c1->giovanni: Establish connection
+c1<-->giovanni: Connection established
+
+== SETUP of the combat ==
+c1->giovanni: WELCOME TEAM(1.herbizzare, 2.carapuce)
+giovanni->c1: WELCOME TEAM(1.miaous, 2.miaous)
+c1->giovanni: SWITCH herbizzare
+giovanni->c1: SWITCH miaous
+giovanni->c1: Turn c1, herbizzare(60), miaous(40)
+
+== Switch ==
+c1->c1: SWITCH
+c1->c1: Your Team (current: herbizzare(60), carapuce(44))
+c1->giovanni: SWITCH carapuce
+giovanni->c1: Turn giovanni, carapuce(44), miaous(40)
+
+== Switch with wrong pokemon ==
+c1->c1: SWITCH
+c1->c1: Your Team (current: herbizzare(60), carapuce(44))
+c1->giovanni: SWITCH dracaufeu
+giovanni->c1: ERROR 1
+
+
+
+@enduml

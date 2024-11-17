@@ -1,0 +1,92 @@
+@startuml functional-example
+
+title "Functionnal example"
+
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as giovanni
+participant "client 3" as sacha
+
+== Join the server ==
+
+note over c1,giovanni
+The socket is instanciated and the connection is
+automatically established.
+end note
+
+c1->s : Establish connection
+c1<-->s : Connection established
+
+c1->s: LOGIN Red
+s->c1: OK
+
+giovanni->s: Establish connection
+s<-->giovanni: Connection established
+
+giovanni->s: LOGIN Giovanni
+s->giovanni: OK
+
+== List possible combats ==
+
+c1->s: JOIN
+s->c1: HOSTS giovanni sacha
+
+== JOIN possible combats ==
+
+c1->s: JOIN giovanni
+s->c1: OK
+
+c1->giovanni: Establish connection
+c1<-->giovanni: Connection established
+
+== HOST possible combats ==
+
+giovanni->s: HOST
+s->giovanni: OK
+s->giovanni: RECEIVE matchmaking from Red
+s->s: Remove Giovanni from Hosts
+
+giovanni->c1: Establish connection
+c1<-->giovanni: Connection established
+
+== POKEDEX ==
+
+c1->s: POKEDEX
+s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
+c1->s: POKEDEX bulbizzare
+s->c1: STATS Bulbizzare (PV: 45, ATT:49,...)
+
+c1->s: POKEDEX ADD dracaufeu (PV:78, ATT:84,...)
+s->c1: OK
+
+== CHANGE team composition==
+note over c1
+Just as in the real game each trainer only
+has 6 pokemon max
+end note
+
+c1->s: CHANGE
+s->c1: YOUR team (1. bulbizzare, 2.carapuce)
+c1->s: CHANGE 1 herbizzare
+s->c1: NEW team (1. herbizzare, 2.carapuce)
+
+== Quit ==
+
+note over c1,giovanni
+Just as for the connection establishment, no
+formal message is sent to the server when
+disconnecting.
+
+The socket is closed by the client and the
+connection is automatically closed.
+end note
+
+c1->c1: Close the connection
+c1<-->s: The connection is closed
+s->s: Remove Red from users
+
+giovanni->giovanni: Close the connection
+giovanni<-->s: The connection si closed
+s->s: Remove Giovanni from users
+
+@enduml
