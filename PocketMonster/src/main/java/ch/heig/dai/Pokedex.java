@@ -44,7 +44,6 @@ public class Pokedex {
                 Elements element = new Elements(elementsData);
 
 
-
                 // Parse Moveset from the 5th field, trimming outer {}
                 String movesData = info[4].trim();
                 movesData = movesData.substring(1, movesData.length());
@@ -93,7 +92,7 @@ public class Pokedex {
     }
 
     public Pokemon getPokemon(int index) {
-        if (index > 0 || index <= this.pokemons.size()) {
+        if (index > 0 && index <= this.pokemons.size()) {
             return pokemons.get(index);
         }
 

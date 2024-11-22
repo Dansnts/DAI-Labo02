@@ -1,7 +1,5 @@
 package ch.heig.dai;
 
-import java.util.ArrayList;
-
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -9,7 +7,7 @@ public class Main {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.printf("Pockemon Octogone Edition");
-
+/*
         Stats stats = new Stats(17,15,20,25,13,100);
         Elements element = new Elements("GRASS");
         ArrayList<Move> moveset = new ArrayList<>();
@@ -20,7 +18,11 @@ public class Main {
         Trainer defaultTrainer = new Trainer(348766483, "Red",pokemons,10000);
 
         Menu menu = new Menu(defaultTrainer,"resources/pokemons.txt");
+*/
 
+        Server server = new Server();
+
+        server.start();
 
     }
 }
