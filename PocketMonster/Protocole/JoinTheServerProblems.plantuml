@@ -1,0 +1,25 @@
+@startuml JoinTheServerProblems
+title "Join the server problem"
+
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as giovanni
+
+== JOIN the server==
+
+note over c1
+The socket is instanciated and the connection is
+automatically established.
+end note
+
+c1->s : Establish connection
+c1<-->s : Connection established
+
+c1->s: LOGIN Red
+s->c1: OK
+
+== JOIN the server with a duplicate name ==
+
+giovanni->s: LOGIN Red
+s->giovanni: ERROR 1
+@enduml

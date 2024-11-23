@@ -1,0 +1,28 @@
+@startuml switchCombatProblem
+title "Problems related to switching in a combat"
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as giovanni
+== Switch ==
+c1->s: SWITCH
+s->c1: Your Team (current: herbizzare(60), carapuce(44))
+c1->s: SWITCH carapuce
+s->giovanni: Turn giovanni, carapuce(44), miaous(40)
+s->c1: Turn giovanni, carapuce(44), miaous(40)
+
+== Switch with wrong pokemon ==
+c1->s: SWITCH
+s->c1: Your Team (current: herbizzare(60), carapuce(44))
+c1->s: SWITCH dracaufeu
+s->c1: ERROR 2
+
+== Switch with a dead pokemon ==
+c1->s: SWITCH
+s->c1: Your Team (current: herbizzare(60), carapuce(dead))
+c1->s: SWITCH carapuce
+s->c1: ERROR 1
+
+
+
+
+@enduml
