@@ -42,7 +42,7 @@ c1<-->giovanni: Connection established
 == JOIN a combats that isn't here ==
 
 c1->s: JOIN sacha
-s->c1: ERROR
+s->c1: ERROR 1
 
 == HOST possible combats ==
 

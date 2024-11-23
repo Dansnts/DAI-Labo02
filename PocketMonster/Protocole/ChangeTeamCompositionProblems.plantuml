@@ -43,12 +43,12 @@ s->c1: NEW team (1. herbizzare, 2.carapuce)
 c1->s: CHANGE
 s->c1: YOUR team (1. herbizzare, 2.carapuce)
 c1->s: CHANGE 2 arsene
-s->c1: ERROR
+s->c1: ERROR 1
 
 == CHANGE team with wrong number of order ==
 c1->s: CHANGE
 s->c1: YOUR team (1. herbizzare, 2.carapuce)
 c1->s: CHANGE 7 carapuce
-s->c1: ERROR
+s->c1: ERROR 2
 
 @enduml

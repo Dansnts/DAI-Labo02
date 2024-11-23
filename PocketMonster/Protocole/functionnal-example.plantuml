@@ -46,17 +46,14 @@ s->giovanni: OK
 s->giovanni: RECEIVE matchmaking from Red
 s->s: Remove Giovanni from Hosts
 
-giovanni->c1: Establish connection
-c1<-->giovanni: Connection established
-
 == POKEDEX ==
 
 c1->s: POKEDEX
 s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
 c1->s: POKEDEX bulbizzare
-s->c1: STATS Bulbizzare (PV: 45, ATT:49,...)
+s->c1: STATS Bulbizzare Grass/Poison (PV: 45, ATT:49,...)
 
-c1->s: POKEDEX ADD dracaufeu (PV:78, ATT:84,...)
+c1->s: POKEDEX ADD dracaufeu Fire/Flying (PV:78, ATT:84,...)
 s->c1: OK
 
 == CHANGE team composition==

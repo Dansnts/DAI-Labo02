@@ -3,30 +3,17 @@ title "problem related to Attacks in combat"
 participant "client 1" as c1
 participant "Server" as s
 participant "client 2" as giovanni
-== JOIN possible combats ==
-
-c1->s: JOIN giovanni
-s->c1: OK
-
-c1->giovanni: Establish connection
-c1<-->giovanni: Connection established
-
-== SETUP of the combat ==
-c1->giovanni: WELCOME TEAM(1.herbizzare, 2.carapuce)
-giovanni->c1: WELCOME TEAM(1.miaous, 2.miaous)
-c1->giovanni: SWITCH herbizzare
-giovanni->c1: SWITCH miaous
-giovanni->c1: Turn c1, herbizzare(60), miaous(40)
 
 == ATTACK ==
-c1->c1: ATTACK
-c1->c1: ATTACK herbizzare (1.tackle 2.Strugle)
-c1->c1: ATTACK Strugle
-c1->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK Strugle
+s->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+s->c1: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
 
 == ATTACK with the wrong attack ==
-c1->c1: ATTACK
-c1->c1: ATTACK herbizzare (1.tackle 2.Strugle)
-c1->c1: ATTACK UltraLaser
-c1->c1: ERROR
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK UltraLaser
+s->c1: ERROR 1
 @enduml

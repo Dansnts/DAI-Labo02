@@ -22,9 +22,9 @@ s->c1: OK
 c1->s: POKEDEX
 s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
 c1->s: POKEDEX bulbizzare
-s->c1: STATS Bulbizzare (PV: 45, ATT:49,...)
+s->c1: STATS Bulbizzare Grass/Poison (PV: 45, ATT:49,...)
 
-c1->s: POKEDEX ADD dracaufeu (PV:78, ATT:84,...)
+c1->s: POKEDEX ADD dracaufeu Fire/Flying (PV:78, ATT:84,...)
 s->c1: OK
 
 == Pokedex don't have this pokemon ==
@@ -32,13 +32,32 @@ s->c1: OK
 c1->s: POKEDEX
 s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
 c1->s: POKEDEX arsene
-s->c1: ERROR
+s->c1: ERROR 1
 
-== POKEDEX ADD missing param ==
+== POKEDEX ADD missing stat ==
 c1->s: POKEDEX
 s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
-c1->s: POKEDEX ADD salamèche (PV:78, DEF:78,...)
-s->c1: ERROR
+c1->s: POKEDEX ADD salamèche Fire (PV:78, DEF:78,...)
+s->c1: ERROR 2
+
+== POKEDEX ADD missing name ==
+c1->s: POKEDEX
+s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
+c1->s: POKEDEX ADD Fire (PV:39, ATT:52,...)
+s->c1: ERROR 3
+
+== POKEDEX ADD missing type ==
+c1->s: POKEDEX
+s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
+c1->s: POKEDEX ADD salamèche  (PV:78, ATT:78,...)
+s->c1: ERROR 4
+
+
+== Pokedex already have this pokemon ==
+c1->s: POKEDEX
+s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
+c1->s: POKEDEX ADD bulbizzare Grass/Poison (PV:45, ATT:49,...)
+s->c1: ERROR 1
 
 
 @enduml

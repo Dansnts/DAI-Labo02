@@ -8,56 +8,52 @@ participant "client 2" as giovanni
 c1->s: JOIN giovanni
 s->c1: OK
 
-c1->giovanni: Establish connection
-c1<-->giovanni: Connection established
+s->giovanni: Beginning fight with Red
 
 == SETUP of the combat ==
-c1->giovanni: WELCOME TEAM(1.herbizzare, 2.carapuce)
-giovanni->c1: WELCOME TEAM(1.miaous, 2.miaous)
-c1->giovanni: SWITCH herbizzare
-giovanni->c1: SWITCH miaous
-giovanni->c1: Turn c1, herbizzare(60), miaous(40)
+c1->s: WELCOME TEAM(1.herbizzare, 2.carapuce)
+s->giovanni: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
+giovanni->s: WELCOME TEAM(1.miaous, 2.persian)
+s->c1: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
+c1->s: SWITCH herbizzare
+giovanni->s: SWITCH miaous
+s->giovanni: Turn c1, herbizzare(60), miaous(40)
+s->c1: Turn c1, herbizzare(60), miaous(40)
 
 
 === normal sequence of a turn ==
 == ATTACK ==
-c1->c1: ATTACK
-c1->c1: ATTACK herbizzare (1.tackle 2.Strugle)
-c1->c1: ATTACK Strugle
-c1->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK Strugle
+s->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+s->c1: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+
 
 == Switch ==
-c1->c1: SWITCH
-c1->c1: Your Team (current: herbizzare(60), carapuce(44))
-c1->c1: SWITCH carapuce
-c1->giovanni: Turn giovanni, carapuce(44), miaous(40)
+c1->s: SWITCH
+s->c1: Your Team (current: herbizzare(60), carapuce(44))
+c1->s: SWITCH carapuce
+s->giovanni: Turn giovanni, carapuce(44), miaous(40)
+c1->s: Turn giovanni, carapuce(44), miaous(40)
+
 
 == EN cas de KO ==
-c1->c1: ATTACK
-c1->c1: ATTACK herbizzare (1.tackle 2.Strugle)
-c1->c1: ATTACK Strugle
-c1->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(0)
-giovanni->giovanni: Your Team(current: miaous(dead), miaous(hp=40))
-giovanni->giovanni: Switch miaous
-giovanni->c1: Turn giovanni, herbizzare(60), miaous(40)
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK Strugle
+s->c1: Turn giovanni, Damage 30, herbizzare(60), miaous(0)
+s->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(0)
+s->giovanni: Your Team(current: miaous(dead), persian(hp=40))
+giovanni->s: Switch persian
+s->c1: Turn giovanni, herbizzare(60), miaous(40)
+s->giovanni: Turn giovanni, herbizzare(60), miaous(40)
 
 == En cas de ko final ==
-c1->c1: ATTACK
-c1->c1: ATTACK herbizzare (1.tackle 2.Strugle)
-c1->c1: ATTACK Strugle
-c1->giovanni: END c1
-giovanni->s: END HOST
-
-c1->s : Establish connection
-c1<-->s : Connection established
-
-c1->s: LOGIN Red
-s->c1: OK
-
-giovanni->s : Establish connection
-giovanni<-->s : Connection established
-
-giovanni->s: LOGIN Giovanni
-s->giovanni: OK
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK Strugle
+s->giovanni: END c1
+s->c1: END c1
 
 @enduml
