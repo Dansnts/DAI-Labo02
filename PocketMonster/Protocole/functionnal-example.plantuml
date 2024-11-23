@@ -33,7 +33,7 @@ s->c1: HOSTS giovanni sacha
 
 == JOIN possible combats ==
 
-c1->s: JOIN giovanni
+c1->s: JOIN Giovanni
 s->c1: OK
 
 c1->giovanni: Establish connection
