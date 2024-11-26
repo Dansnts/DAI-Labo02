@@ -115,6 +115,7 @@ public class Server {
             out.write("3. Make Team\n");
             out.write("4. Show Pokedex\n");
             out.write("5. Exit\n");
+            out.write("6. Fighting\n");
             out.flush();
 
             String choice = in.readLine();
@@ -131,6 +132,8 @@ public class Server {
                 case "4":
                     showPokedex();
                     break;
+                case "6":
+
                 default:
                     sendMessage("[Server] Goodbye!");
             }
