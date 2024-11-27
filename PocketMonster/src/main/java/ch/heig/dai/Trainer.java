@@ -58,4 +58,8 @@ public class Trainer {
         }
     }
 
+    public Pokemon[] getPokemons(){
+        return pokemons.clone();
+    }
+
 }

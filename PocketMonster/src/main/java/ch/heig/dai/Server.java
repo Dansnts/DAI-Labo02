@@ -50,6 +50,7 @@ public class Server {
     }
 
     private static class ClientHandler implements Runnable {
+        private static ClientHandler[] lookingToFight = new ClientHandler[0];
         private final Socket socket;
         private final BufferedReader in;
         private final BufferedWriter out;
@@ -115,7 +116,8 @@ public class Server {
             out.write("3. Make Team\n");
             out.write("4. Show Pokedex\n");
             out.write("5. Exit\n");
-            out.write("6. Fighting\n");
+            out.write("6. LookingToFighting\n");
+            out.write("7. WaitingToFight\n");
             out.flush();
 
             String choice = in.readLine();
@@ -133,6 +135,18 @@ public class Server {
                     showPokedex();
                     break;
                 case "6":
+                    setLookingToFight();
+                    break;
+                case "7":
+                    // adding the client to the waiting list
+                    ClientHandler[] temp = new ClientHandler[lookingToFight.length + 1];
+                    for (int i = 0; i < lookingToFight.length; i++) {
+                        temp[i] = lookingToFight[i];
+                    }
+                    temp[lookingToFight.length] = this;
+                    lookingToFight = temp;
+                    waitingToFight();
+                    break;
 
                 default:
                     sendMessage("[Server] Goodbye!");
@@ -201,6 +215,64 @@ public class Server {
             }
         }
 
+        private void waitingToFight() throws IOException {
+            boolean iswaiting = true;
+            out.write("You are currently waiting for an opponent, if you want to stop waiting enter 1\n");
+            out.flush();
+            while (iswaiting) {
+                out.flush();
+                // wait and if he enters something to maybe quit he can but the server won't wait for a response.
+                if (in.ready()){
+                    out.write( "fdsafdsaf\n");
+                    if (Objects.equals(in.readLine(), "1") ){
+                        // changing the waiting to make sure the client isn't here no more
+                        boolean passed = false;
+                        ClientHandler[] temp = new ClientHandler[lookingToFight.length - 1];
+                        for (int i = 0; i < lookingToFight.length; i++) {
+                            if (lookingToFight[i] == this) {
+                                passed = true;
+                            } else {
+                                if (passed){
+                                    temp[i - 1] = lookingToFight[i];
+                                } else {
+                                    temp[i] = lookingToFight[i];
+                                }
+                            }
+                        }
+                        lookingToFight = temp;
+                        iswaiting = false;
+                    }
+                }
+            }
+        }
+
+        private void setLookingToFight (){
+            try{
+                out.write("[Server] Looking to fight?\n");
+                out.write("Choose your opponent:\n");
+                for (int i = 0; i < lookingToFight.length; i++) {
+                    out.write(i + ". " + lookingToFight[i] + "\n");
+                }
+                out.flush();
+                boolean notChosen = true;
+                while(notChosen){
+                    String message = in.readLine();
+
+                    try{
+                        int opponent = Integer.parseInt(message);
+                        notChosen = false;
+                        battling(this, lookingToFight[opponent]);
+
+                    } catch (NumberFormatException e){
+                        System.out.println("[Server] Invalid opponent. Please enter the number of the opponent you wish to fight.");
+                    }
+
+                }
+            } catch (IOException e){
+                System.out.println("[Server] IO exception: " + e.getMessage());
+            }
+        }
+
         private void disconnect() {
             try {
                 synchronized (clients) {
@@ -213,6 +285,12 @@ public class Server {
             } catch (IOException e) {
                 System.out.println("[Server] Error closing socket for client: " + e.getMessage());
             }
+        }
+
+        private void battling(ClientHandler first, ClientHandler second) throws IOException {
+
+            first.out.write("pd");
+            second.out.write("salope");
         }
     }
 
