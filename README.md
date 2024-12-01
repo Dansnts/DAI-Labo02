@@ -1,7 +1,7 @@
 
 # Pokémon Octogone Edition
 
-**Pokémon Octogone Edition** is a TCP-based multiplayer Pokémon game developed for the **DAI (Distributed Artificial Intelligence)** course. The project leverages **Maven** as a build and dependency management tool, making it easy to manage dependencies and run the project.
+**Pokémon Octogone Edition** is a TCP-based multiplayer Pokémon game developed for the **DAI** course. The project leverages **Maven** as a build and dependency management tool, making it easy to manage dependencies and run the project.
 
 ---
 
