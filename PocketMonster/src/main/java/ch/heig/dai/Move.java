@@ -14,6 +14,11 @@ public class Move {
         this.type = type;
     }
 
+    public Move parseMove(String data){
+        System.out.println("MOVES : "+ data);
+
+        return null;
+    }
 
     public void printMove(){
         System.out.println(this.name + " - " + this.type + " \n" + this.pp + "PP - Precision : " + this.precision + "/100");

@@ -16,10 +16,18 @@ enum Type {
     NONE;
 }
 
+
+
 public class Elements {
     Type type;
     Type weakness;
     public static final String[] TYPES = {"GRASS", "FIRE", "WATER", "NORMAL", "PSY", "POISON", "ELEC", "FLY", "GHOST", "DRAGON", "NONE"};
+
+
+    public Elements(String type){
+        this.type = getType(type);
+        this.weakness = getWeakness(this.type);
+    }
 
     public Type getWeakness(Type type){
         Type typeWeakness;
@@ -63,11 +71,6 @@ public class Elements {
                 System.out.print(", ");
             System.out.print(TYPES[i]);
         }
-    }
-
-    public Elements(Type type){
-        this.type = type;
-        this.weakness = getWeakness(this.type);
     }
 
 }

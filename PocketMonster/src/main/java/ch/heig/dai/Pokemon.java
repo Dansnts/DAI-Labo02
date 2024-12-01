@@ -1,5 +1,6 @@
 package ch.heig.dai;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Pokemon {
@@ -7,10 +8,10 @@ public class Pokemon {
     private String name;
     private int level;
     private Elements element;
-    private Move[] moveset;
+    private ArrayList<Move> moveset;
     private Stats stats;
 
-    public Pokemon(int PokedexID, String name, int level,Elements element, Move[] moveset, Stats stats) {
+    public Pokemon(int PokedexID, String name, int level, Elements element, ArrayList<Move> moveset, Stats stats) {
         this.pokedexID = PokedexID;
         this.name = name;
         this.level = level;
@@ -39,11 +40,11 @@ public class Pokemon {
         System.out.println("Choose a Type:");
         element.printMoves();
         scanner.nextLine();
-        Elements elements = new Elements(element.getType(scanner.nextLine()));
+        Elements elements = new Elements(scanner.nextLine());
 
         System.out.println("How many moves ? [1-4]");
         int nbMoves = scanner.nextInt();
-        Move move = moveset[nbMoves];
+        Move move = moveset.get(nbMoves);
 
         for(int i = 1; i <= nbMoves; i++){
             System.out.println("Enter the move n°" + i + " : ");
@@ -61,7 +62,7 @@ public class Pokemon {
             System.out.println("Precison [5 - 100] : ");
             int movePrecision = scanner.nextInt();
 
-            moveset[i-1] = new Move(moveName,movePP,movePrecision,moveType);
+            moveset.add(new Move(moveName,movePP,movePrecision,moveType));
         }
 
         Pokemon newPokemon = new Pokemon(id, name, level, elements, moveset, stats);
@@ -71,12 +72,16 @@ public class Pokemon {
     }
 
     public void printPokemon() {
+        System.out.println("----------------------------------------------");
         System.out.println(this.name + " #" + this.pokedexID);
         System.out.println("Type : " + this.element.typeToString());
+        System.out.println("Level : " + this.level);
         System.out.println("Moveset : ");
         for (Move move : this.moveset) {
             move.printMove();
         }
         System.out.println();
+        System.out.println("----------------------------------------------");
+
     }
 }
