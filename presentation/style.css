@@ -1,0 +1,31 @@
+/* electron-theme.css */
+pre code {
+    background-color: #2e2e2e;  /* Dark background for Electron look */
+    color: #f8f8f2;            /* Light text for readability */
+    font-size: 0.95em;         /* Slightly smaller font size */
+    border-radius: 8px;        /* Rounded corners */
+    padding: 12px;             /* Padding around the code block */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+  }
+  
+  /* Syntax highlighting colors for different languages */
+  pre code .hljs-keyword {
+    color: #ff79c6;  /* Pink for keywords */
+  }
+  
+  pre code .hljs-string {
+    color: #f1fa8c;  /* Yellow for strings */
+  }
+  
+  pre code .hljs-comment {
+    color: #6272a4;  /* Blue-gray for comments */
+  }
+  
+  pre code .hljs-function {
+    color: #50fa7b;  /* Green for function names */
+  }
+  
+  pre code .hljs-number {
+    color: #bd93f9;  /* Purple for numbers */
+  }
+  
