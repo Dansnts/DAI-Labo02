@@ -37,135 +37,77 @@ Nicolas **Duprat**
 
 
 
-## PicoEncrypt 1.0
+## Pokémon Octogone édition
 ### Outline
 
-- **Objective**: Create a program who can encrypt and decrypt text and binary files with picoCLI.
-- **Project Goal**: Learn how to use Java I/O and picoCLI
+- **Objective**: Create a program who uses TCP sockets in Java
+- **Project Goal**: Learn how to use sockets in Java and create a protocol
+![bg right:40% vcenter contain](./images/logo.png)
 
 ## Key Features
 
 <br>
 
-- **File mode**: Text or binary
-- **Encryption** mode: Encryption = true & Decryption = False
-- **Techniques**: Cesar, To Numbers, To Emoji, Xor, Mix of Cesar and Xor
+- **Pokédex** Add and use any Pokémon (Yes, even Sephiroth) 
+- **Teams**: Make a team from the Pokémons available
+- **Trainer** :  Create your trainer
+- **BATTLES !**: 1v1 a friend via Internet
+
 
 
 ## How did we split the work
 
 <br>
 
+**Dani** : Sockets, Connections, Trainer/Pokémon implementation, Menus & Docker
+**Nicolas** : Battle, Refractoring & protocol design
 
-**Dani** : picoCLI,  I/O, documentation
-**Nicolas** : Encryption / Decryption
 
-
-## GitHub
+## Pokédex
 
 <br>
 
+- Filled with Pokémons
+- Loaded and saved in a .txt files
 
-- Branchs
-- Issues
-- Pull Requests
+
+
+## Trainer
+<br>
+- Has a team
+- Name
+- Money
   
-![bg right:40% vcenter contain](./Git.jpg)
-
-
-## Structure
-<br>
-
-- Main.java
-- 3 Classes
-  - Encryption
-  - FileHandler
-  - Picocli
-
-![bg right:40% vcenter height:50%](./tree.png)
-
 
 ## What we used
 <br>
 
 
 - **Language**: Java
-- **Tools**: Maven, Git, picoCLI
+- **Tools**: Maven, Git, picoCLI & Docker
+
+## Protocol
+- The port it uses is the port number 28500.
+
+![bg right:60% vcenter contain](./images/protocole.png)
 
 
-## picoCLI
-<br>
 
-```Java
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Command;
-
-
-@Command(name = "PicoEncrypt", mixinStandardHelpOptions = true, version = "PicoEncrypt 1.0", description = "Simple encrypt/decrypt app with picco")
-public class Picocli implements Runnable {
-
-    @Option(names = {"-s", "--srcFile"},
-            description = "Path to the source file.\n"
-                    + "Example: /path/to/myfile.txt")
-    String srcFile;
-
-    ...
-
-    @Option(names = {"-k", "--key"},
-            description = "Key for the encryption/decryption.\n"
-                    + "Default : 1")
-    String key;
-
-    @Override
-    public void run() {
-        // Magic happens here 
-    }
-
-```
-## Encryption
-##### Textual files:
-
-- Cesar encryption
-- Number encryption
-- Emoji encryption
-  
----
-  ```Java
-    private String CesarEncryption(Boolean isDecrypting) {
-        StringBuilder encryptedText = new StringBuilder();
-        
-        int shift = key.charAt(0) - 'a';
-        if (shift < 0) shift = 0;
-
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-
-            // Shift all characters (including accents and symbols)
-            if (isDecrypting) {
-                c = (char) (c - shift);
-            } else {
-                c = (char) (c + shift);
-            }
-            encryptedText.append(c);
-        }
-        return encryptedText.toString();
-    }
-  ```
----
-
-##### Binary files:
-- Xor encryption
-- Cesar encryption
-- Xor + Cesar Encryption
+## UML
+![10% vcenter contain](./images/uml.png)
 
 <br>
 
-```Java
-private int BinXorEncryption(int byteData) {
-    int intKey = Integer.parseInt(key);
-    return byteData ^ intKey;
-}
-```
+
+## Usage
+#### Docker
+- Server
+
+#### Jar
+- Client
+
+<br>
+
 
 # Demonstration
 <style scoped>
