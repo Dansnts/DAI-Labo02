@@ -64,7 +64,13 @@ public class Pokemon {
             System.out.println("Precison [5 - 100] : ");
             int movePrecision = scanner.nextInt();
 
-            moveset.add(new Move(moveName,movePP,movePrecision,moveType));
+            System.out.println("Damage : ");
+            int moveDamage = scanner.nextInt();
+
+            System.out.println("Is your move isung attack spe?: ");
+            boolean moveIsung = scanner.nextBoolean();
+
+            moveset.add(new Move(moveName,movePP,movePrecision,moveType,moveDamage,moveIsung));
         }
 
         Pokemon newPokemon = new Pokemon(id, name, level, elements, moveset, stats);
@@ -97,5 +103,9 @@ public class Pokemon {
 
     public ArrayList<Move> getMoveset(){
         return moveset;
+    }
+
+    public Elements getType(){
+        return element;
     }
 }

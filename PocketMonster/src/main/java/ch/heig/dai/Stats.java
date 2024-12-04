@@ -24,4 +24,14 @@ public class Stats {
     public int getSpeed(){
         return speed;
     }
+
+    public int getAttack() {
+        return attack;
+    }
+    public int getDefense() {
+        return defense;
+    }
+    public int getSpecial() {
+        return special;
+    }
 }

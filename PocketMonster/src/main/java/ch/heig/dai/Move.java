@@ -6,14 +6,18 @@ public class Move {
     private int precision;
     private Type type;
     private int actualPp;
+    private int power;
+    private boolean spe;
 
 
-    public Move(String name, int pp,int precision, Type type) {
+    public Move(String name, int pp,int precision, Type type, int power, boolean spe) {
         this.name = name;
         this.pp = pp;
         this.precision = precision;
         this.type = type;
         this.actualPp = pp;
+        this.power = power;
+        this.spe = spe;
     }
 
     public Move parseMove(String data){
@@ -48,5 +52,13 @@ public class Move {
 
     public void setActualPp(){
         this.actualPp--;
+    }
+
+    public int getPower(){
+        return power;
+    }
+
+    public boolean isSpe(){
+        return spe;
     }
 }

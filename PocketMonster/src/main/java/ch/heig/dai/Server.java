@@ -20,7 +20,7 @@ public class Server {
             Stats stats = new Stats(17, 15, 20, 25, 13, 100);
             Elements element = new Elements("GRASS");
             ArrayList<Move> moveset = new ArrayList<>();
-            moveset.add(new Move("Tackle", 20, 95, Type.NORMAL));
+            moveset.add(new Move("Tackle", 20, 95, Type.NORMAL, 20, false));
             Pokemon bulbasaur = new Pokemon(1, "Bulbasaur", 5, element, moveset, stats);
             Pokemon[] pokemons = new Pokemon[]{bulbasaur};
             Trainer defaultTrainer = new Trainer(348766483, "Red", pokemons, 10000);
@@ -289,11 +289,8 @@ public class Server {
         }
 
         private void battling(ClientHandler first, ClientHandler second) throws IOException {
-
-            first.out.write("pd" + ENDOFLINE);
-            second.out.write("salope" + ENDOFLINE);
-            first.out.flush();
-            second.out.flush();
+            Battle fight = new Battle(first.in, first.out, first.trainer, second.in, second.out, second.trainer);
+            fight.fighting();
         }
     }
 

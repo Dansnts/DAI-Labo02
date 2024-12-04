@@ -46,17 +46,19 @@ public class Pokedex {
 
                 // Parse Moveset from the 5th field, trimming outer {}
                 String movesData = info[4].trim();
-                movesData = movesData.substring(1, movesData.length());
+                movesData = movesData.substring(1);
                 String[] moveParts = movesData.split("}"); // Split by semicolon
                 ArrayList<Move> moveset = new ArrayList<>();
 
-                int moveSize = 4;
+                int moveSize = 6;
                 if (moveParts.length == moveSize) {
                     // Create the Move object using the split parts
                     moveset.add(new Move(moveParts[0],
                             Integer.parseInt(moveParts[1]),
                             Integer.parseInt(moveParts[2]),
-                            element.getType(moveParts[3])));
+                            element.getType(moveParts[3]),
+                            Integer.parseInt(moveParts[4]),
+                            Boolean.parseBoolean(moveParts[5])));
 
                     // Use the move object as needed
                 } else {

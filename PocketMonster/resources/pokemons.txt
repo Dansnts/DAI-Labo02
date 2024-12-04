@@ -1,3 +1,3 @@
-1;Bulbasaur;5;{GRASS};{Razor Leaf;70;100;GRASS},{23,15,20,25,13,100}
-4;Squirtle;5;{WATER};{Water Gun;60;95;WATTER},{15,13,20,20,20,100}
-58;Growlithe;5;{FIRE};{Ember;40;90;FIRE},{14,19,20,25,25,100}
+1;Bulbasaur;5;{GRASS};{Razor Leaf;20;100;GRASS;70;true},{23,15,20,25,13,100}
+4;Squirtle;5;{WATER};{Water Gun;20;95;WATTER;60;true},{15,13,20,20,20,100}
+58;Growlithe;5;{FIRE};{Ember;20;90;FIRE;40;true},{14,19,20,25,25,100}
