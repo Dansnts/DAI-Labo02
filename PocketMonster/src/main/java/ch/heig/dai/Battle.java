@@ -7,16 +7,16 @@ import java.util.Random;
 
 public class Battle {
     private static final String ENDOFLINE = "\n";
-    private Pokemon activePokemon1;
-    private Pokemon activePokemon2;
-    private Pokemon[] pokeTeam1;
-    private Pokemon[] pokeTeam2;
-    private BufferedWriter out1;
-    private BufferedWriter out2;
-    private BufferedReader in1;
-    private BufferedReader in2;
-    private Trainer trainer1;
-    private Trainer trainer2;
+    private Pokemon activePokemon;
+    private Pokemon activePokemonEnnemy;
+    private Pokemon[] pokeTeam;
+    private Pokemon[] pokeTeamEnnemy;
+    private BufferedWriter out;
+    private BufferedWriter outEnnemy;
+    private BufferedReader in;
+    private BufferedReader inEnnemy;
+    private Trainer trainer;
+    private Trainer trainerEnnemy;
     private int round;
     private boolean turn; // if turn == true then it is the turn of trainer1
     private Random random = new Random();
@@ -29,36 +29,36 @@ public class Battle {
                   BufferedReader inTrainer2,
                   BufferedWriter outTrainer2,
                   Trainer trainer2) {
-        this.trainer1 = trainer1;
-        this.trainer2 = trainer2;
-        this.in1 = inTrainer1;
-        this.in2 = inTrainer2;
-        this.out1 = outTrainer1;
-        this.out2 = outTrainer2;
-        this.pokeTeam1 = trainer1.getPokemons();
-        this.pokeTeam2 = trainer2.getPokemons();
+        this.trainer = trainer1;
+        this.trainerEnnemy = trainer2;
+        this.in = inTrainer1;
+        this.inEnnemy = inTrainer2;
+        this.out = outTrainer1;
+        this.outEnnemy = outTrainer2;
+        this.pokeTeam = trainer1.getPokemons();
+        this.pokeTeamEnnemy = trainer2.getPokemons();
         this.round = 0;
 
         // Do the Sockets for communication here
     }
 
     public void fighting() throws IOException {
-        out1.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
-        out2.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
-        out1.flush();
-        out2.flush();
-        this.fightSetup(out1, in1, pokeTeam1, activePokemon1);
-        out1.write(trainer1.getName() + " throw " + activePokemon1.getName() + " onto the battlefield" + ENDOFLINE);
-        out2.write(trainer1.getName() + " throw " + activePokemon1.getName() + " onto the battlefield" + ENDOFLINE);
-        this.fightSetup(out2, in2, pokeTeam2, activePokemon2);
-        out1.write(trainer2.getName() + " throw " + activePokemon2.getName() + " onto the battlefield" + ENDOFLINE);
-        out2.write(trainer2.getName() + " throw " + activePokemon2.getName() + " onto the battlefield" + ENDOFLINE);
-        out1.flush();
-        out2.flush();
-        if (activePokemon1.getStats().getSpeed() > activePokemon2.getStats().getSpeed()) {
+        out.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
+        outEnnemy.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
+        out.flush();
+        outEnnemy.flush();
+        this.fightSetup(out, in, pokeTeam, activePokemon);
+        out.write(trainer.getName() + " throw " + activePokemon.getName() + " onto the battlefield" + ENDOFLINE);
+        outEnnemy.write(trainer.getName() + " throw " + activePokemon.getName() + " onto the battlefield" + ENDOFLINE);
+        this.fightSetup(outEnnemy, inEnnemy, pokeTeamEnnemy, activePokemonEnnemy);
+        out.write(trainerEnnemy.getName() + " throw " + activePokemonEnnemy.getName() + " onto the battlefield" + ENDOFLINE);
+        outEnnemy.write(trainerEnnemy.getName() + " throw " + activePokemonEnnemy.getName() + " onto the battlefield" + ENDOFLINE);
+        out.flush();
+        outEnnemy.flush();
+        if (activePokemon.getStats().getSpeed() > activePokemonEnnemy.getStats().getSpeed()) {
             turn = true;
         } else {
-            if (activePokemon2.getStats().getSpeed() > activePokemon1.getStats().getSpeed()) {
+            if (activePokemonEnnemy.getStats().getSpeed() > activePokemon.getStats().getSpeed()) {
                 turn = false;
             } else {
                 if (Math.random() >= 0.5){
@@ -70,7 +70,7 @@ public class Battle {
         }
 
         while(!gameOver){
-            turn(turn);
+            turnSetup();
 
 
 
@@ -80,7 +80,7 @@ public class Battle {
 
 
 
-        activePokemon2 = trainer2.getPokemons()[0];
+        activePokemonEnnemy = trainerEnnemy.getPokemons()[0];
 
 
     }
@@ -104,14 +104,133 @@ public class Battle {
 
     }
 
-    private void turn(boolean turn) throws IOException {
-        BufferedWriter out = turn? out1 : out2;
-        BufferedReader in = turn? in1 : in2;
-        BufferedWriter outEnnemy = turn? out2 : out1;
+    private void turnSetup() throws IOException {
+        out = turn? this.out : outEnnemy;
+        in = turn? this.in : inEnnemy;
+        outEnnemy = turn? this.outEnnemy : this.out;
+        Trainer temp = turn? this.trainer : this.trainerEnnemy;
+        trainerEnnemy = turn? this.trainerEnnemy : this.trainer;
+        trainer = turn? this.trainer : temp;
+        Pokemon[] pokeTemp = turn ? this.pokeTeam : this.pokeTeamEnnemy;
+        pokeTeamEnnemy = turn? this.pokeTeamEnnemy : this.pokeTeam;
+        pokeTeam = turn? this.pokeTeam : pokeTemp;
+        Pokemon actualTemp = turn? this.activePokemon : this.activePokemonEnnemy;
+        activePokemonEnnemy = turn? this.activePokemonEnnemy : this.activePokemon;
+        activePokemon = turn? this.activePokemon : actualTemp;
 
-        out.write("this is your turn." + ENDOFLINE);
+
+
+
         outEnnemy.write("this is the turn of your ennemy." + ENDOFLINE);
         outEnnemy.flush();
+        out.write("this is your turn." + ENDOFLINE);
+        out.flush();
+        turnChoice();
 
+    }
+
+    private void turnChoice () throws IOException {
+        out.write("please choose your next move:" + ENDOFLINE);
+        out.write("- CHANGE <pokemon>" + ENDOFLINE);
+        out.write("- ATTACK <move>" + ENDOFLINE);
+        out.flush();
+
+        String message = in.readLine();
+        String[] parts = message.split(" ", 2);
+        boolean noEntry = (parts.length == 2);
+        switch (parts[0]){
+            case "CHANGE":
+                if (noEntry) {
+                    change(parts[1]);
+                } else {
+                    changeNoEntry();
+                }
+                break;
+
+            case "ATTACK":
+                if (noEntry) {
+
+                } else {
+
+                }
+                break;
+
+            default:
+                out.write("please use an eligible choice" + ENDOFLINE );
+                turnChoice();
+                break;
+        }
+    }
+
+    private void change (String pokemon) throws IOException {
+        int healthCount = 0;
+        boolean changed = false;
+        for (int i = 0; i < pokeTeam.length; i++) {
+            if (pokeTeam[i].getName().equals(pokemon) && pokeTeam[i].actualHealth != 0) {
+                activePokemon = pokeTeam[i];
+                changed = true;
+            } else {
+                if (pokeTeam[i].getName().equals(pokemon) && pokeTeam[i].actualHealth == 0) {
+                    healthCount++;
+                }
+            }
+        }
+        if (healthCount >0 && !changed) {
+            out.write("bro this pokemon already died, don't do him like that" + ENDOFLINE);
+            out.flush();
+            turnChoice();
+        } else {
+            if (!changed){
+                out.write("bro you ain't got this pokemon" + ENDOFLINE);
+                out.flush();
+                turnChoice();
+            } else {
+                out.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                out.flush();
+                outEnnemy.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                turn = !turn;
+                turnSetup();
+            }
+        }
+    }
+
+    private void changeNoEntry () throws IOException {
+        out.write("here is your team:" + ENDOFLINE);
+        for (int i = 0; i < pokeTeam.length; i++) {
+            out.write(i + ". " + pokeTeam[i].getName() + ENDOFLINE);
+        }
+        out.flush();
+        turnChoice();
+    }
+
+    private void attack (String move) throws IOException {
+        for (int i = 0; i < activePokemon.getMoveset().size(); i++) {
+            if (activePokemon.getMoveset().get(i).getName().equals(move)) {
+                if (activePokemon.getMoveset().get(i).getActualPp() == 0){
+                    out.write("this move is out of pp and is therefore useless" + ENDOFLINE);
+                    out.flush();
+                    turnChoice();
+                } else {
+                    damageCalc(activePokemon.getMoveset().get(i));
+                }
+            } else {
+                out.write("Your pokemon cannot perform this move " + ENDOFLINE);
+                out.flush();
+                turnChoice();
+            }
+        }
+    }
+
+    private void attackNoEntry () throws IOException {
+        out.write("here are the moves of your pokemon:" + ENDOFLINE);
+        for (int i = 0; i < activePokemon.getMoveset().size(); i++) {
+            activePokemon.getMoveset().get(i).printMove();
+        }
+        out.flush();
+        turnChoice();
+    }
+
+    private void damageCalc (Move move) throws IOException {
+        
     }
 }

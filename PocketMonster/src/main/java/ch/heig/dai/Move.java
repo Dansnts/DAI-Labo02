@@ -5,6 +5,7 @@ public class Move {
     private int pp;
     private int precision;
     private Type type;
+    private int actualPp;
 
 
     public Move(String name, int pp,int precision, Type type) {
@@ -12,6 +13,7 @@ public class Move {
         this.pp = pp;
         this.precision = precision;
         this.type = type;
+        this.actualPp = pp;
     }
 
     public Move parseMove(String data){
@@ -21,6 +23,30 @@ public class Move {
     }
 
     public void printMove(){
-        System.out.println(this.name + " - " + this.type + " \n" + this.pp + "PP - Precision : " + this.precision + "/100");
+        System.out.println(this.name + " - " + this.type + " \n" + this.pp + "PP - Precision : " + this.precision + "/100\n");
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getPp(){
+        return pp;
+    }
+
+    public int getPrecision(){
+        return precision;
+    }
+
+    public Type getType(){
+        return type;
+    }
+
+    public int getActualPp(){
+        return actualPp;
+    }
+
+    public void setActualPp(){
+        this.actualPp--;
     }
 }

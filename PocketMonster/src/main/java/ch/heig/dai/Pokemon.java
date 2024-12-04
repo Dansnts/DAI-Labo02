@@ -10,7 +10,7 @@ public class Pokemon {
     private Elements element;
     private ArrayList<Move> moveset;
     private Stats stats;
-    private int actualHealth;
+    public int actualHealth;
 
     public Pokemon(int PokedexID, String name, int level, Elements element, ArrayList<Move> moveset, Stats stats) {
         this.pokedexID = PokedexID;
@@ -19,6 +19,7 @@ public class Pokemon {
         this.element = element;
         this.moveset = moveset;
         this.stats = stats;
+        this.actualHealth = stats.getHp();
     }
 
     public int getPokedexID() {
@@ -92,5 +93,9 @@ public class Pokemon {
 
     public Stats getStats(){
         return stats;
+    }
+
+    public ArrayList<Move> getMoveset(){
+        return moveset;
     }
 }
