@@ -10,6 +10,7 @@ public class Pokemon {
     private Elements element;
     private ArrayList<Move> moveset;
     private Stats stats;
+    private int actualHealth;
 
     public Pokemon(int PokedexID, String name, int level, Elements element, ArrayList<Move> moveset, Stats stats) {
         this.pokedexID = PokedexID;
@@ -83,5 +84,13 @@ public class Pokemon {
         System.out.println();
         System.out.println("----------------------------------------------");
 
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public Stats getStats(){
+        return stats;
     }
 }

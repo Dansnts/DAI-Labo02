@@ -62,4 +62,8 @@ public class Trainer {
         return pokemons.clone();
     }
 
+    public String getName(){
+        return name;
+    }
+
 }

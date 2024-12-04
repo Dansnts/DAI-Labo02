@@ -8,6 +8,7 @@ import java.util.*;
 public class Server {
 
     private static final int PORT = 15100;
+    public static final String ENDOFLINE = "\n";
     private static final List<ClientHandler> clients = new ArrayList<>();
 
     // Main method to start the server
@@ -289,8 +290,10 @@ public class Server {
 
         private void battling(ClientHandler first, ClientHandler second) throws IOException {
 
-            first.out.write("pd");
-            second.out.write("salope");
+            first.out.write("pd" + ENDOFLINE);
+            second.out.write("salope" + ENDOFLINE);
+            first.out.flush();
+            second.out.flush();
         }
     }
 

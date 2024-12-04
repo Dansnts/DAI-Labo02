@@ -16,4 +16,12 @@ public class Stats {
         this.special = special;
         this.speed = speed;
     }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
 }
