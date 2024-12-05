@@ -5,10 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * This class represents a battle between two trainers in a Pokémon-like game. It handles the setup,
- * turns, actions, and end of the game logic.
- */
 public class Battle {
     private static final String ENDOFLINE = "\n";
     private Pokemon activePokemon;
@@ -22,22 +18,12 @@ public class Battle {
     private Trainer trainer;
     private Trainer trainerEnnemy;
     private int round;
-    private boolean turn; // if turn == true then it is the turn of trainer1
+    private boolean turn;// if turn == true then it is the turn of trainer1
     private Random random = new Random();
     private boolean gameOver;
     private int turnNumber;
 
-    /**
-     * Creates a new battle between two trainers, initializing their teams, communication channels,
-     * and the game state.
-     *
-     * @param inTrainer1 BufferedReader for reading input from Trainer 1.
-     * @param outTrainer1 BufferedWriter for sending output to Trainer 1.
-     * @param trainer1 Trainer 1 participating in the battle.
-     * @param inTrainer2 BufferedReader for reading input from Trainer 2.
-     * @param outTrainer2 BufferedWriter for sending output to Trainer 2.
-     * @param trainer2 Trainer 2 participating in the battle.
-     */
+
     public Battle(BufferedReader inTrainer1,
                   BufferedWriter outTrainer1,
                   Trainer trainer1,
@@ -57,12 +43,6 @@ public class Battle {
         // Do the Sockets for communication here
     }
 
-    /**
-     * Starts the fighting phase of the battle, including setup, turn-by-turn gameplay,
-     * and determining the winner.
-     *
-     * @throws IOException If an I/O error occurs during communication with trainers.
-     */
     public void fighting() throws IOException {
         out.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
         outEnnemy.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
@@ -78,14 +58,20 @@ public class Battle {
         outEnnemy.flush();
         if (activePokemon.getStats().getSpeed() > activePokemonEnnemy.getStats().getSpeed()) {
             turn = true;
-        } else if (activePokemonEnnemy.getStats().getSpeed() > activePokemon.getStats().getSpeed()) {
-            turn = false;
         } else {
-            turn = Math.random() >= 0.5;
+            if (activePokemonEnnemy.getStats().getSpeed() > activePokemon.getStats().getSpeed()) {
+                turn = false;
+            } else {
+                if (Math.random() >= 0.5){
+                    turn = true;
+                } else {
+                    turn = false;
+                }
+            }
         }
         turnNumber = 1;
 
-        while (!gameOver) {
+        while(!gameOver){
             turnSetup();
             System.out.println(turn);
             turn = !turn;
@@ -94,14 +80,6 @@ public class Battle {
         end();
     }
 
-    /**
-     * Handles the setup of the battle for a trainer by allowing them to choose their active Pokémon.
-     *
-     * @param out BufferedWriter for sending messages to the trainer.
-     * @param in BufferedReader for receiving input from the trainer.
-     * @param pokeTeam The team of Pokémon available to the trainer.
-     * @throws IOException If an I/O error occurs during communication.
-     */
     private void fightSetup(BufferedWriter out, BufferedReader in, Pokemon[] pokeTeam) throws IOException {
         out.write("The battle is starting you may choose your active pokemon" + ENDOFLINE);
         out.write("Here is your team:" + ENDOFLINE);
@@ -110,9 +88,9 @@ public class Battle {
         }
         out.flush();
         String message = in.readLine();
-        boolean response = Integer.parseInt(message) <= pokeTeam.length - 1;
+        boolean response = Integer.parseInt(message) <= pokeTeam.length - 1 ;
         if (response) {
-            if (out.equals(this.out)) {
+            if (out.equals(this.out)){
                 this.activePokemon = pokeTeam[Integer.parseInt(message)];
             } else {
                 this.activePokemonEnnemy = pokeTeam[Integer.parseInt(message)];
@@ -122,32 +100,246 @@ public class Battle {
             out.write("please enter the number of the pokemon you wish to put in the active position" + ENDOFLINE);
             out.flush();
         }
+
     }
 
-    /**
-     * Prepares the game state and trainers for the current turn.
-     *
-     * @throws IOException If an I/O error occurs during communication.
-     */
     private void turnSetup() throws IOException {
-        // Logic for turn setup...
+        if (turnNumber == 1){
+            BufferedWriter tempOut = turn? this.out : outEnnemy;
+            outEnnemy = turn? this.outEnnemy : this.out;
+            out = turn? this.out : tempOut;
+            BufferedReader tempIn = inEnnemy;
+            inEnnemy = turn? this.inEnnemy : this.in;
+            in = turn? this.in : tempIn;
+            Trainer temp = turn? this.trainer : this.trainerEnnemy;
+            trainerEnnemy = turn? this.trainerEnnemy : this.trainer;
+            trainer = turn? this.trainer : temp;
+            Pokemon[] pokeTemp = turn ? this.pokeTeam : this.pokeTeamEnnemy;
+            pokeTeamEnnemy = turn? this.pokeTeamEnnemy : this.pokeTeam;
+            pokeTeam = turn? this.pokeTeam : pokeTemp;
+            Pokemon actualTemp = turn? this.activePokemon : this.activePokemonEnnemy;
+            activePokemonEnnemy = turn? this.activePokemonEnnemy : this.activePokemon;
+            activePokemon = turn? this.activePokemon : actualTemp;
+        } else {
+            BufferedWriter tempOut = outEnnemy;
+            outEnnemy = this.out;
+            out = tempOut;
+            BufferedReader tempIn = inEnnemy;
+            inEnnemy = this.in;
+            in = tempIn;
+            Trainer temp = this.trainerEnnemy;
+            trainerEnnemy = this.trainer;
+            trainer = temp;
+            Pokemon[] pokeTemp = this.pokeTeamEnnemy;
+            pokeTeamEnnemy = this.pokeTeam;
+            pokeTeam = pokeTemp;
+            Pokemon actualTemp = this.activePokemonEnnemy;
+            activePokemonEnnemy = this.activePokemon;
+            activePokemon = actualTemp;
+        }
+
+
+
+
+        outEnnemy.write(ENDOFLINE);
+        outEnnemy.write("this is the turn of your ennemy." + ENDOFLINE);
+        outEnnemy.write("STATE of the game:" + ENDOFLINE);
+        outEnnemy.write("Ennemy: " + activePokemon.getName() + " (" + activePokemon.actualHealth + ")" + ENDOFLINE);
+        outEnnemy.write("You : " + activePokemonEnnemy.getName() + " (" + activePokemonEnnemy.actualHealth + ")" + ENDOFLINE);
+        outEnnemy.flush();
+        out.write(ENDOFLINE);
+        out.write("this is your turn." + ENDOFLINE);
+        out.write("STATE of the game:" + ENDOFLINE);
+        out.write("Ennemy: " + activePokemonEnnemy.getName() + " (" + activePokemonEnnemy.actualHealth + ")" + ENDOFLINE);
+        out.write("You : " + activePokemon.getName() + " (" + activePokemon.actualHealth + ")" + ENDOFLINE);
+        out.flush();
+        turnChoice();
+
     }
 
-    /**
-     * Handles the player's turn, presenting choices such as attacking or switching Pokémon.
-     *
-     * @throws IOException If an I/O error occurs during communication.
-     */
-    private void turnChoice() throws IOException {
-        // Logic for handling turn choices...
+    private void turnChoice () throws IOException {
+        out.write(ENDOFLINE);
+        out.write("please choose your next move:" + ENDOFLINE);
+        out.write("- CHANGE <pokemon>" + ENDOFLINE);
+        out.write("- ATTACK <move>" + ENDOFLINE);
+        out.flush();
+
+        String message = in.readLine();
+        String[] parts = message.split(" ", 2);
+        boolean noEntry = (parts.length < 2);
+        switch (parts[0]){
+            case "CHANGE":
+                if (noEntry) {
+                    changeNoEntry();
+                } else {
+                    change(parts[1]);
+                }
+                break;
+
+            case "ATTACK":
+                if (noEntry) {
+                    attackNoEntry();
+                } else {
+                    attack(parts[1]);
+                }
+                break;
+
+            default:
+                out.write("please use an eligible choice" + ENDOFLINE );
+                turnChoice();
+                break;
+        }
     }
 
-    /**
-     * Resets the health of all Pokémon in both teams to their maximum at the end of the battle.
-     *
-     * @throws IOException If an I/O error occurs during communication.
-     */
-    public void end() throws IOException {
+    private void change (String pokemon) throws IOException {
+        int healthCount = 0;
+        boolean changed = false;
+        for (int i = 0; i < trainer.getNbPokemon(); i++) {
+            if (pokeTeam[i].getName().equals(pokemon) && pokeTeam[i].actualHealth != 0) {
+                activePokemon = pokeTeam[i];
+                changed = true;
+            } else {
+                if (pokeTeam[i].getName().equals(pokemon) && pokeTeam[i].actualHealth == 0) {
+                    healthCount++;
+                }
+            }
+        }
+        if (healthCount >0 && !changed) {
+            out.write("bro this pokemon already died, don't do him like that" + ENDOFLINE);
+            out.flush();
+            turnChoice();
+        } else {
+            if (!changed){
+                out.write("bro you ain't got this pokemon" + ENDOFLINE);
+                out.flush();
+                turnChoice();
+            } else {
+                out.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                out.flush();
+                outEnnemy.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                outEnnemy.flush();
+            }
+        }
+    }
+
+    private void changeNoEntry () throws IOException {
+        out.write("here is your team:" + ENDOFLINE);
+        for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+            out.write(pokeTeam[i].getName() + ENDOFLINE);
+        }
+        out.flush();
+        turnChoice();
+    }
+
+    private void attack (String move) throws IOException {
+        for (int i = 0; i < activePokemon.getMoveset().size(); i++) {
+            if (activePokemon.getMoveset().get(i).getName().equals(move)) {
+                if (activePokemon.getMoveset().get(i).getActualPp() == 0){
+                    out.write("this move is out of pp and is therefore useless" + ENDOFLINE);
+                    out.flush();
+                    turnChoice();
+                } else {
+                    damageCalc(activePokemon.getMoveset().get(i));
+                }
+            } else {
+                out.write("Your pokemon cannot perform this move " + ENDOFLINE);
+                out.flush();
+                turnChoice();
+            }
+        }
+    }
+
+    private void attackNoEntry () throws IOException {
+        out.write("here are the moves of your pokemon:" + ENDOFLINE);
+        for (int i = 0; i < activePokemon.getMoveset().size(); i++) {
+            out.write(activePokemon.getMoveset().get(i).printMove());
+        }
+        out.flush();
+        turnChoice();
+    }
+
+    private void damageCalc (Move move) throws IOException {
+        if (random.nextInt(100) < move.getPrecision()) {
+            double tempCalc;
+            if(move.isSpe()){
+                tempCalc = (double) activePokemon.getStats().getSpecial() /activePokemonEnnemy.getStats().getSpecial();
+            } else {
+                tempCalc = (double) activePokemon.getStats().getAttack() /activePokemonEnnemy.getStats().getDefense();
+            }
+            double tempTypeCalc = (move.getPower() * (move.getType().equals(activePokemon.getType().type)? 1.5 : 1) *
+                                (move.getType().equals(activePokemonEnnemy.getType().weakness)? 2 : 1));
+            tempCalc = tempTypeCalc * tempCalc;
+            activePokemonEnnemy.actualHealth = (int) (activePokemonEnnemy.actualHealth - tempCalc);
+            out.write(activePokemon.getName() + " has hit with " + move.getName() + ENDOFLINE);
+            outEnnemy.write(activePokemon.getName() + "has hit with " + move.getName() + ENDOFLINE);
+            out.write(activePokemonEnnemy.getName() + " has lost " + tempCalc + " hp and now has " + activePokemonEnnemy.actualHealth + ENDOFLINE);
+            outEnnemy.write(activePokemonEnnemy.getName() + " has lost " + tempCalc + " hp and now has " + activePokemonEnnemy.actualHealth + ENDOFLINE);
+            out.flush();
+            outEnnemy.flush();
+            if (activePokemonEnnemy.actualHealth <= 0){
+                pokemonDead();
+            }
+        } else {
+            out.write(activePokemon.getName() + " misses his attack" + ENDOFLINE);
+            out.flush();
+        }
+    }
+
+    private void pokemonDead () throws IOException {
+        outEnnemy.write(activePokemonEnnemy.getName() + " is dead" + ENDOFLINE);
+        int nbrDead = 0;
+        for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+            if (pokeTeam[i].actualHealth <= 0){
+                nbrDead++;
+            }
+        }
+        if (nbrDead == trainerEnnemy.getNbPokemon()){
+            outEnnemy.write("All your team is dead you have lost" + ENDOFLINE);
+            out.write("The ennemy team is dead. GG you have win" + ENDOFLINE);
+            outEnnemy.flush();
+            out.flush();
+            gameOver = true;
+        } else {
+            boolean hasSelected = false;
+            while (!hasSelected){
+                outEnnemy.write("Here is your team, please select an alive pokemon to put in the active place:" + ENDOFLINE);
+                for (int i= 0; i < trainerEnnemy.getNbPokemon(); i++) {
+                    outEnnemy.write(pokeTeamEnnemy[i].getName() + ENDOFLINE);
+                }
+                String pokemon = inEnnemy.readLine();
+                int healthCount = 0;
+                boolean changed = false;
+                for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+                    if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth > 0) {
+                        activePokemonEnnemy = pokeTeamEnnemy[i];
+                        changed = true;
+                        hasSelected = true;
+                    } else {
+                        if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth <= 0) {
+                            healthCount++;
+                        }
+                    }
+                }
+                if (healthCount >0 && !changed) {
+                    outEnnemy.write("bro this pokemon already died, don't do him like that" + ENDOFLINE);
+                    outEnnemy.flush();
+                    pokemonDead();
+                } else {
+                    if(!changed){
+                        outEnnemy.write("bro you ain't got this pokemon" + ENDOFLINE);
+                        outEnnemy.flush();
+                        pokemonDead();
+                    } else {
+                        outEnnemy.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                        outEnnemy.flush();
+                        out.write(trainer.getName() + "switched his pokemon to " + activePokemon.getName() + ENDOFLINE);
+                        out.flush();
+                    }
+                }
+            }
+        }
+    }
+    public void end () throws IOException {
         for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
             pokeTeamEnnemy[i].actualHealth = pokeTeamEnnemy[i].getStats().getHp();
         }
@@ -155,5 +347,4 @@ public class Battle {
             pokeTeam[i].actualHealth = pokeTeam[i].getStats().getHp();
         }
     }
-
 }
