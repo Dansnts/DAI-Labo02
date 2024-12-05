@@ -86,10 +86,6 @@ POKEDEX ADD
 ```
 #### Responses
 - `enter the name...`: The server will ask question so that it can register the pokemon.
-- `ERROR <code>`:an error occurred while sending the message.
-The error code is an integer between 1 and 2 inclusive.
-The error code is as follow:
-  - 1: Too much parameter
 
 ### Changing your team
 The client wants to change his team

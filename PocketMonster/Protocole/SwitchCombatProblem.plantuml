@@ -7,8 +7,10 @@ participant "client 2" as giovanni
 c1->s: SWITCH
 s->c1: Your Team (current: herbizzare(60), carapuce(44))
 c1->s: SWITCH carapuce
-s->giovanni: Turn giovanni, carapuce(44), miaous(40)
-s->c1: Turn giovanni, carapuce(44), miaous(40)
+s->giovanni:carapuce(44), miaous(40)
+s->c1:carapuce(44), miaous(40)
+s->giovanni: Turn giovanni
+s->c1: Turn giovanni
 
 == Switch with wrong pokemon ==
 c1->s: SWITCH

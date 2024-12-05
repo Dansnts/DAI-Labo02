@@ -17,16 +17,6 @@ c1<-->s : Connection established
 c1->s: LOGIN Red
 s->c1: OK
 
-== POKEDEX ==
-
-c1->s: POKEDEX
-s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
-c1->s: POKEDEX bulbizzare
-s->c1: STATS Bulbizzare (PV: 45, ATT:49,...)
-
-c1->s: POKEDEX ADD dracaufeu (PV:78, ATT:84,...)
-s->c1: OK
-
 == CHANGE team composition==
 note over c1
 Just as in the real game each trainer only
@@ -34,9 +24,9 @@ has 6 pokemon max
 end note
 
 c1->s: CHANGE
-s->c1: YOUR team (1. bulbizzare, 2.carapuce)
+s->c1: YOUR team ( bulbizzare, carapuce)
 c1->s: CHANGE 1 herbizzare
-s->c1: NEW team (1. herbizzare, 2.carapuce)
+s->c1: OK
 
 == CHANGE team with a non existing pokemon ==
 
@@ -50,5 +40,11 @@ c1->s: CHANGE
 s->c1: YOUR team (1. herbizzare, 2.carapuce)
 c1->s: CHANGE 7 carapuce
 s->c1: ERROR 2
+
+== CHANGE lacks a parameter ==
+c1->s: CHANGE
+s->c1: YOUR team (1. herbizzare, 2.carapuce)
+c1->s: CHANGE 4
+s->c1: ERROR 3
 
 @enduml

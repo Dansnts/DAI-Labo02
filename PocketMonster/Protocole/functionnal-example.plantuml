@@ -49,11 +49,14 @@ s->s: Remove Giovanni from Hosts
 == POKEDEX ==
 
 c1->s: POKEDEX
-s->c1: POKEMON (1. bulbizzare, 2.herbizzare, 3.florizzare,...)
+s->c1: POKEMON (bulbizzare, herbizzare, florizzare,...)
 c1->s: POKEDEX bulbizzare
 s->c1: STATS Bulbizzare Grass/Poison (PV: 45, ATT:49,...)
 
-c1->s: POKEDEX ADD dracaufeu Fire/Flying (PV:78, ATT:84,...)
+c1->s: POKEDEX ADD
+s->c1: what is his name?
+c1->s: dracaufeu
+s->c1: etc...
 s->c1: OK
 
 == CHANGE team composition==
@@ -63,9 +66,9 @@ has 6 pokemon max
 end note
 
 c1->s: CHANGE
-s->c1: YOUR team (1. bulbizzare, 2.carapuce)
+s->c1: YOUR team (bulbizzare, carapuce)
 c1->s: CHANGE 1 herbizzare
-s->c1: NEW team (1. herbizzare, 2.carapuce)
+s->c1: OK
 
 == Quit ==
 

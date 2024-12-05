@@ -11,9 +11,9 @@ s->c1: OK
 s->giovanni: Beginning fight with Red
 
 == SETUP of the combat ==
-c1->s: WELCOME TEAM(1.herbizzare, 2.carapuce)
+s->c1: WELCOME TEAM(1.herbizzare, 2.carapuce)
 s->giovanni: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
-giovanni->s: WELCOME TEAM(1.miaous, 2.persian)
+s->giovanni: WELCOME TEAM(1.miaous, 2.persian)
 s->c1: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
 c1->s: SWITCH herbizzare
 giovanni->s: SWITCH miaous
@@ -26,14 +26,18 @@ s->c1: Turn c1, herbizzare(60), miaous(40)
 c1->s: ATTACK
 s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
-s->c1: Turn giovanni, Damage 30, herbizzare(60), miaous(10)
+s->giovanni: herbizzare dealt 30 damage
+s->c1: herbizzare dealt 30 damage
+s->c1: Turn giovanni, herbizzare(60), miaous(10)
+s->giovanni: Turn giovanni, herbizzare(60), miaous(10)
 
 
 == Switch ==
 c1->s: SWITCH
 s->c1: Your Team (current: herbizzare(60), carapuce(44))
 c1->s: SWITCH carapuce
+s->giovanni: red switched in carapuce
+s->c1: red switched in carapuce
 s->giovanni: Turn giovanni, carapuce(44), miaous(40)
 c1->s: Turn giovanni, carapuce(44), miaous(40)
 
@@ -42,9 +46,11 @@ c1->s: Turn giovanni, carapuce(44), miaous(40)
 c1->s: ATTACK
 s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->c1: Turn giovanni, Damage 30, herbizzare(60), miaous(0)
-s->giovanni: Turn giovanni, Damage 30, herbizzare(60), miaous(0)
-s->giovanni: Your Team(current: miaous(dead), persian(hp=40))
+s->giovanni: herbizzare dealt 30 damage
+s->c1: herbizzare dealt 30 damage
+s->c1: Turn giovanni, herbizzare(60), miaous(0)
+s->giovanni: Turn giovanni, herbizzare(60), miaous(0)
+s->giovanni: Your Team(current: miaous, persian)
 giovanni->s: Switch persian
 s->c1: Turn giovanni, herbizzare(60), miaous(40)
 s->giovanni: Turn giovanni, herbizzare(60), miaous(40)
@@ -53,7 +59,7 @@ s->giovanni: Turn giovanni, herbizzare(60), miaous(40)
 c1->s: ATTACK
 s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->giovanni: END c1
-s->c1: END c1
+s->giovanni: END c1, you lost
+s->c1: END c1, you won
 
 @enduml
