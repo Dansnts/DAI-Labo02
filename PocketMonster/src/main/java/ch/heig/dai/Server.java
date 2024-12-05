@@ -75,27 +75,7 @@ public class Server {
                 boolean isRunning = true;
 
                 while (isRunning) {
-                    sendMenu();
-                    String choice = in.readLine();
-
-                    System.out.println("[DEBUG] Received input: '" + choice + "'");
-
-                    if (choice == null || choice.trim().isEmpty()) {
-                        sendMessage("[Server] Invalid input. Please try again.");
-                        continue;
-                    }
-
-                    switch (choice.trim()) {
-                        case "1":
-                            startChat();
-                            break;
-                        case "2":
-                            handlePokemonMenu();
-                            break;
-                        default:
-                            sendMessage("[Server] Invalid choice. Please enter '1' or '2'.");
-                            break;
-                    }
+                    handlePokemonMenu();
                 }
             } catch (IOException e) {
                 System.out.println("[Server] IO exception with client: " + e.getMessage());
@@ -114,7 +94,7 @@ public class Server {
         }
 
         private void handlePokemonMenu() throws IOException {
-            out.write("[Server] Pokémon Menu\n");
+            out.write("[Server] Welcome to the Server!\n");
             out.write("Choose an option:\n");
             out.write("POKEDEX <pokemon>: Show Pokedex or the entry for a pokemon\n");
             out.write("POKEDEX ADD <pokemon>: Adds a pokemon to the pokedex\n");
