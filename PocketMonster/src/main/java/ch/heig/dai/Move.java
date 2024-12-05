@@ -26,8 +26,8 @@ public class Move {
         return null;
     }
 
-    public void printMove(){
-        System.out.println(this.name + " - " + this.type + " \n" + this.pp + "PP - Precision : " + this.precision + "/100\n");
+    public String printMove(){
+        return this.name + " - " + this.type + "(" + this.actualPp + "PP - Precision : " + this.precision + "/100)\n";
     }
 
     public String getName(){

@@ -22,7 +22,8 @@ public class Server {
             ArrayList<Move> moveset = new ArrayList<>();
             moveset.add(new Move("Tackle", 20, 95, Type.NORMAL, 20, false));
             Pokemon bulbasaur = new Pokemon(1, "Bulbasaur", 5, element, moveset, stats);
-            Pokemon[] pokemons = new Pokemon[]{bulbasaur};
+            Pokemon herbizzare = new Pokemon(1, "herbizzare", 5, element, moveset, stats);
+            Pokemon[] pokemons = new Pokemon[]{bulbasaur, herbizzare};
             Trainer defaultTrainer = new Trainer(348766483, "Red", pokemons, 10000);
 
             while (true) {

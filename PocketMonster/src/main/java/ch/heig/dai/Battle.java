@@ -18,9 +18,10 @@ public class Battle {
     private Trainer trainer;
     private Trainer trainerEnnemy;
     private int round;
-    private boolean turn; // if turn == true then it is the turn of trainer1
+    private boolean turn;// if turn == true then it is the turn of trainer1
     private Random random = new Random();
     private boolean gameOver;
+    private int turnNumber;
 
 
     public Battle(BufferedReader inTrainer1,
@@ -47,10 +48,10 @@ public class Battle {
         outEnnemy.write("WELCOME to POKEMON OCTOGONE !!!!!" + ENDOFLINE);
         out.flush();
         outEnnemy.flush();
-        this.fightSetup(out, in, pokeTeam, activePokemon);
+        this.fightSetup(out, in, pokeTeam);
         out.write(trainer.getName() + " throw " + activePokemon.getName() + " onto the battlefield" + ENDOFLINE);
         outEnnemy.write(trainer.getName() + " throw " + activePokemon.getName() + " onto the battlefield" + ENDOFLINE);
-        this.fightSetup(outEnnemy, inEnnemy, pokeTeamEnnemy, activePokemonEnnemy);
+        this.fightSetup(outEnnemy, inEnnemy, pokeTeamEnnemy);
         out.write(trainerEnnemy.getName() + " throw " + activePokemonEnnemy.getName() + " onto the battlefield" + ENDOFLINE);
         outEnnemy.write(trainerEnnemy.getName() + " throw " + activePokemonEnnemy.getName() + " onto the battlefield" + ENDOFLINE);
         out.flush();
@@ -68,14 +69,17 @@ public class Battle {
                 }
             }
         }
+        turnNumber = 1;
 
         while(!gameOver){
             turnSetup();
+            System.out.println(turn);
             turn = !turn;
+            this.turnNumber++;
         }
     }
 
-    private void fightSetup(BufferedWriter out, BufferedReader in, Pokemon[] pokeTeam, Pokemon activePokemon) throws IOException {
+    private void fightSetup(BufferedWriter out, BufferedReader in, Pokemon[] pokeTeam) throws IOException {
         out.write("The battle is starting you may choose your active pokemon" + ENDOFLINE);
         out.write("Here is your team:" + ENDOFLINE);
         for (int i = 0; i < pokeTeam.length; i++) {
@@ -83,9 +87,13 @@ public class Battle {
         }
         out.flush();
         String message = in.readLine();
-        boolean response = Integer.parseInt(message) <= pokeTeam.length ;
+        boolean response = Integer.parseInt(message) <= pokeTeam.length - 1 ;
         if (response) {
-            activePokemon = pokeTeam[Integer.parseInt(message) - 1];
+            if (out.equals(this.out)){
+                this.activePokemon = pokeTeam[Integer.parseInt(message)];
+            } else {
+                this.activePokemonEnnemy = pokeTeam[Integer.parseInt(message)];
+            }
         } else {
             out.write("ERROR: message entered wasn't allowed." + ENDOFLINE);
             out.write("please enter the number of the pokemon you wish to put in the active position" + ENDOFLINE);
@@ -95,21 +103,40 @@ public class Battle {
     }
 
     private void turnSetup() throws IOException {
-        BufferedWriter tempOut = turn? this.out : outEnnemy;
-        outEnnemy = turn? this.outEnnemy : this.out;
-        out = turn? this.out : tempOut;
-        BufferedReader tempIn = inEnnemy;
-        inEnnemy = turn? this.inEnnemy : this.in;
-        in = turn? this.in : inEnnemy;
-        Trainer temp = turn? this.trainer : this.trainerEnnemy;
-        trainerEnnemy = turn? this.trainerEnnemy : this.trainer;
-        trainer = turn? this.trainer : temp;
-        Pokemon[] pokeTemp = turn ? this.pokeTeam : this.pokeTeamEnnemy;
-        pokeTeamEnnemy = turn? this.pokeTeamEnnemy : this.pokeTeam;
-        pokeTeam = turn? this.pokeTeam : pokeTemp;
-        Pokemon actualTemp = turn? this.activePokemon : this.activePokemonEnnemy;
-        activePokemonEnnemy = turn? this.activePokemonEnnemy : this.activePokemon;
-        activePokemon = turn? this.activePokemon : actualTemp;
+        if (turnNumber == 1){
+            BufferedWriter tempOut = turn? this.out : outEnnemy;
+            outEnnemy = turn? this.outEnnemy : this.out;
+            out = turn? this.out : tempOut;
+            BufferedReader tempIn = inEnnemy;
+            inEnnemy = turn? this.inEnnemy : this.in;
+            in = turn? this.in : tempIn;
+            Trainer temp = turn? this.trainer : this.trainerEnnemy;
+            trainerEnnemy = turn? this.trainerEnnemy : this.trainer;
+            trainer = turn? this.trainer : temp;
+            Pokemon[] pokeTemp = turn ? this.pokeTeam : this.pokeTeamEnnemy;
+            pokeTeamEnnemy = turn? this.pokeTeamEnnemy : this.pokeTeam;
+            pokeTeam = turn? this.pokeTeam : pokeTemp;
+            Pokemon actualTemp = turn? this.activePokemon : this.activePokemonEnnemy;
+            activePokemonEnnemy = turn? this.activePokemonEnnemy : this.activePokemon;
+            activePokemon = turn? this.activePokemon : actualTemp;
+        } else {
+            BufferedWriter tempOut = outEnnemy;
+            outEnnemy = this.out;
+            out = tempOut;
+            BufferedReader tempIn = inEnnemy;
+            inEnnemy = this.in;
+            in = tempIn;
+            Trainer temp = this.trainerEnnemy;
+            trainerEnnemy = this.trainer;
+            trainer = temp;
+            Pokemon[] pokeTemp = this.pokeTeamEnnemy;
+            pokeTeamEnnemy = this.pokeTeam;
+            pokeTeam = pokeTemp;
+            Pokemon actualTemp = this.activePokemonEnnemy;
+            activePokemonEnnemy = this.activePokemon;
+            activePokemon = actualTemp;
+        }
+
 
 
 
@@ -136,21 +163,21 @@ public class Battle {
 
         String message = in.readLine();
         String[] parts = message.split(" ", 2);
-        boolean noEntry = (parts.length == 2);
+        boolean noEntry = (parts.length < 2);
         switch (parts[0]){
             case "CHANGE":
                 if (noEntry) {
-                    change(parts[1]);
-                } else {
                     changeNoEntry();
+                } else {
+                    change(parts[1]);
                 }
                 break;
 
             case "ATTACK":
                 if (noEntry) {
-
+                    attackNoEntry();
                 } else {
-
+                    attack(parts[1]);
                 }
                 break;
 
@@ -198,7 +225,7 @@ public class Battle {
             out.write(pokemon.getName() + ENDOFLINE);
         }
         out.flush();
-        turnChoice();
+        //turnChoice();
     }
 
     private void attack (String move) throws IOException {
@@ -222,7 +249,7 @@ public class Battle {
     private void attackNoEntry () throws IOException {
         out.write("here are the moves of your pokemon:" + ENDOFLINE);
         for (int i = 0; i < activePokemon.getMoveset().size(); i++) {
-            activePokemon.getMoveset().get(i).printMove();
+            out.write(activePokemon.getMoveset().get(i).printMove());
         }
         out.flush();
         turnChoice();
@@ -232,9 +259,9 @@ public class Battle {
         if (random.nextInt(100) < move.getPrecision()) {
             double tempCalc;
             if(move.isSpe()){
-                tempCalc = activePokemon.getStats().getSpecial()/activePokemonEnnemy.getStats().getSpecial();
+                tempCalc = (double) activePokemon.getStats().getSpecial() /activePokemonEnnemy.getStats().getSpecial();
             } else {
-                tempCalc = activePokemon.getStats().getAttack()/activePokemonEnnemy.getStats().getDefense();
+                tempCalc = (double) activePokemon.getStats().getAttack() /activePokemonEnnemy.getStats().getDefense();
             }
             double tempTypeCalc = (move.getPower() * (move.getType().equals(activePokemon.getType().type)? 1.5 : 1) *
                                 (move.getType().equals(activePokemonEnnemy.getType().weakness)? 2 : 1));
