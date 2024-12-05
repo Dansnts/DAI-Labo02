@@ -31,12 +31,12 @@ which will close the connection on the server side.
 The client is looking to battle someone
 #### Request
 ```
-JOIN <Username>
+JOIN <hostId>
 ```
-- `<Username>`: The Username of the client, who is hosting, 
+- `<hostId>`: The id of the client who's looking for a match and an opponent 
 that he wants to challenge
 #### Responses
-- `Giovanni,...`: The client didn't send any Username, so the 
+- `hostId,...`: The client didn't send any hostID, so the 
 server sends him a message containing all the other clients 
 willing to host a game
 - `OK`: The Username sent by the client is valid and the 
@@ -100,10 +100,10 @@ Change <number> <pokémon>
 - `<number>`: The place in the team of the pokémon to be swapped
 - `<pokémon>`: The pokémon to be placed in the team
 #### Responses
-- `YOUR team (1. bulbizzare, 2. carapuce,...`: The client didn't 
+- `YOUR team (1. bulbizzare, 2. squirtle,...`: The client didn't 
 put any number or any pokémon so the server shows him his actual 
 team
-- `NEW team (1.herbizzare, 2.carapuce,...`: The client wanted to 
+- `NEW team (1.herbizzare, 2.squirtle,...`: The client wanted to 
 change his bulbasaur for a herbizzare
 - `ERROR <code>`:an error occurred while sending the message.
   The error code is an integer between 1 and 2 inclusive.
