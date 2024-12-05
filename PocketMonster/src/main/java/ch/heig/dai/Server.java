@@ -18,11 +18,12 @@ public class Server {
 
             // Example Pokémon and Trainer setup (can be replaced with actual logic)
             Stats stats = new Stats(17, 15, 20, 25, 13, 100);
+            Stats stats2 = new Stats(17, 50, 20, 25, 13, 150);
             Elements element = new Elements("GRASS");
             ArrayList<Move> moveset = new ArrayList<>();
             moveset.add(new Move("Tackle", 20, 95, Type.NORMAL, 20, false));
             Pokemon bulbasaur = new Pokemon(1, "Bulbasaur", 5, element, moveset, stats);
-            Pokemon herbizzare = new Pokemon(1, "herbizzare", 5, element, moveset, stats);
+            Pokemon herbizzare = new Pokemon(1, "herbizzare", 5, element, moveset, stats2);
             Pokemon[] pokemons = new Pokemon[]{bulbasaur, herbizzare};
             Trainer defaultTrainer = new Trainer(348766483, "Red", pokemons, 10000);
 
@@ -58,12 +59,14 @@ public class Server {
         private final BufferedWriter out;
         private String clientName;
         private Trainer trainer;
+        private Pokedex pokedex;
 
         ClientHandler(Socket socket, Trainer trainer) throws IOException {
             this.socket = socket;
             this.trainer = trainer;
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+            this.pokedex = new Pokedex();
         }
 
         @Override
@@ -113,33 +116,64 @@ public class Server {
         private void handlePokemonMenu() throws IOException {
             out.write("[Server] Pokémon Menu\n");
             out.write("Choose an option:\n");
-            out.write("1. Add Pokémon\n");
-            out.write("2. Remove Pokémon\n");
-            out.write("3. Make Team\n");
-            out.write("4. Show Pokedex\n");
-            out.write("5. Exit\n");
-            out.write("6. LookingToFighting\n");
-            out.write("7. WaitingToFight\n");
+            out.write("POKEDEX <pokemon>: Show Pokedex or the entry for a pokemon\n");
+            out.write("POKEDEX ADD <pokemon>: Adds a pokemon to the pokedex\n");
+            out.write("JOIN <username>: Show list of poeple waiting to battle or challenge someone \n");
+            out.write("HOST: makes you wait for someone to challenge you\n");
+            out.write("CHANGE <number> <pokemon>: Show you your team or switch the 'number'-ième pokemon par 'pokemon'\n");
+            out.write("QUIT\n");
             out.flush();
 
             String choice = in.readLine();
-            switch (choice) {
+            String[] parts = choice.split(" ", 3);
+            switch (parts[0]) {
                 case "1":
                     startChat();
                     break;
                 case "2":
                     removePokemon();
                     break;
-                case "3":
+                case "CHANGE":
+                    if (parts.length == 1){
+                        out.write(trainer.printPokemon());
+                    } else {
+                        if (parts.length == 3){
+                            out.write("OK");
+                            Pokemon pokemon = pokedex.getPokemon(parts[2]);
+                            if (pokemon != null){
+                                if (Integer.parseInt(parts[1]) >= 1 || Integer.parseInt(parts[1]) <= 6 ){
+                                    trainer.setPokemons(pokemon,Integer.parseInt(parts[1]) - 1);
+
+                                } else {
+                                    out.write("ERROR: please put a number between 1 and 6.");
+                                }
+                            } else {
+                                out.write("ERROR " + parts[2] + " is not in the database please ask for another pokemon or create him");
+                            }
+                        } else {
+                            out.write("ERROR :you lack one parameter");
+                            out.flush();
+                            handlePokemonMenu();
+                        }
+                    }
                     makeTeam();
                     break;
-                case "4":
-                    showPokedex();
+                case "POKEDEX":
+                    if (parts.length == 2 && parts[1].equalsIgnoreCase("ADD")){
+                        pokedex.addPokedex(out, in);
+                        handlePokemonMenu();
+                    } else {
+                        if (parts.length == 1){
+                            pokedex.printPokedex(out, in);
+                            handlePokemonMenu();
+                        }
+                        out.write("ERROR :you have too much parameters");
+                    }
                     break;
-                case "6":
+                case "JOIN":
                     setLookingToFight();
                     break;
-                case "7":
+                case "HOST":
                     // adding the client to the waiting list
                     ClientHandler[] temp = new ClientHandler[lookingToFight.length + 1];
                     for (int i = 0; i < lookingToFight.length; i++) {
@@ -148,6 +182,10 @@ public class Server {
                     temp[lookingToFight.length] = this;
                     lookingToFight = temp;
                     waitingToFight();
+                    break;
+
+                case "QUIT":
+                    disconnect();
                     break;
 
                 default:
@@ -225,23 +263,9 @@ public class Server {
                 out.flush();
                 // wait and if he enters something to maybe quit he can but the server won't wait for a response.
                 if (in.ready()){
-                    out.write( "fdsafdsaf\n");
                     if (Objects.equals(in.readLine(), "1") ){
                         // changing the waiting to make sure the client isn't here no more
-                        boolean passed = false;
-                        ClientHandler[] temp = new ClientHandler[lookingToFight.length - 1];
-                        for (int i = 0; i < lookingToFight.length; i++) {
-                            if (lookingToFight[i] == this) {
-                                passed = true;
-                            } else {
-                                if (passed){
-                                    temp[i - 1] = lookingToFight[i];
-                                } else {
-                                    temp[i] = lookingToFight[i];
-                                }
-                            }
-                        }
-                        lookingToFight = temp;
+                        lookingToFight = delete(this);
                         iswaiting = false;
                     }
                 }
@@ -290,8 +314,34 @@ public class Server {
         }
 
         private void battling(ClientHandler first, ClientHandler second) throws IOException {
+            lookingToFight = delete(second);
             Battle fight = new Battle(first.in, first.out, first.trainer, second.in, second.out, second.trainer);
             fight.fighting();
+            second.out.write("Because you were waiting for a fight before you will be put again, enter 1 to quit");
+            ClientHandler[] temp = new ClientHandler[lookingToFight.length + 1];
+            for (int i = 0; i < lookingToFight.length; i++) {
+                temp[i] = lookingToFight[i];
+            }
+            temp[lookingToFight.length] = second;
+            lookingToFight = temp;
+
+        }
+
+        private ClientHandler[] delete(ClientHandler client){
+            boolean passed = false;
+            ClientHandler[] temp = new ClientHandler[lookingToFight.length - 1];
+            for (int i = 0; i < lookingToFight.length; i++) {
+                if (lookingToFight[i] == client) {
+                    passed = true;
+                } else {
+                    if (passed){
+                        temp[i - 1] = lookingToFight[i];
+                    } else {
+                        temp[i] = lookingToFight[i];
+                    }
+                }
+            }
+            return temp;
         }
     }
 

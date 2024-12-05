@@ -77,6 +77,7 @@ public class Battle {
             turn = !turn;
             this.turnNumber++;
         }
+
     }
 
     private void fightSetup(BufferedWriter out, BufferedReader in, Pokemon[] pokeTeam) throws IOException {
@@ -140,12 +141,13 @@ public class Battle {
 
 
 
-
+        outEnnemy.write(ENDOFLINE);
         outEnnemy.write("this is the turn of your ennemy." + ENDOFLINE);
         outEnnemy.write("STATE of the game:" + ENDOFLINE);
         outEnnemy.write("Ennemy: " + activePokemon.getName() + " (" + activePokemon.actualHealth + ")" + ENDOFLINE);
         outEnnemy.write("You : " + activePokemonEnnemy.getName() + " (" + activePokemonEnnemy.actualHealth + ")" + ENDOFLINE);
         outEnnemy.flush();
+        out.write(ENDOFLINE);
         out.write("this is your turn." + ENDOFLINE);
         out.write("STATE of the game:" + ENDOFLINE);
         out.write("Ennemy: " + activePokemonEnnemy.getName() + " (" + activePokemonEnnemy.actualHealth + ")" + ENDOFLINE);
@@ -156,6 +158,7 @@ public class Battle {
     }
 
     private void turnChoice () throws IOException {
+        out.write(ENDOFLINE);
         out.write("please choose your next move:" + ENDOFLINE);
         out.write("- CHANGE <pokemon>" + ENDOFLINE);
         out.write("- ATTACK <move>" + ENDOFLINE);
@@ -225,7 +228,7 @@ public class Battle {
             out.write(pokemon.getName() + ENDOFLINE);
         }
         out.flush();
-        //turnChoice();
+        turnChoice();
     }
 
     private void attack (String move) throws IOException {
@@ -307,12 +310,12 @@ public class Battle {
                 int healthCount = 0;
                 boolean changed = false;
                 for (int i = 0; i < pokeTeamEnnemy.length; i++) {
-                    if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth != 0) {
+                    if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth > 0) {
                         activePokemonEnnemy = pokeTeamEnnemy[i];
                         changed = true;
                         hasSelected = true;
                     } else {
-                        if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth == 0) {
+                        if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth <= 0) {
                             healthCount++;
                         }
                     }

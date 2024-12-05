@@ -8,7 +8,7 @@ public class Trainer {
     private int noID;
     private String name;
     private int nbPokemon;
-    private Pokemon[] pokemons;
+    private Pokemon[] pokemons = new Pokemon[MAX_POKEMONS];
     private int money;
 
     public void printTrainer() {
@@ -25,9 +25,11 @@ public class Trainer {
     public Trainer(int noID, String name, Pokemon[] pokemons, int money) {
         this.noID = noID;
         this.name = name;
-        this.pokemons = pokemons;
         this.money = money;
-        this.nbPokemon = this.pokemons.length;
+        this.nbPokemon = pokemons.length;
+        for (int i = 0; i < pokemons.length; i++) {
+            this.pokemons[i] = pokemons[i];
+        }
 
     }
 
@@ -59,11 +61,28 @@ public class Trainer {
     }
 
     public Pokemon[] getPokemons(){
-        return pokemons.clone();
+        return pokemons;
     }
 
     public String getName(){
         return name;
+    }
+
+    public void setPokemons(Pokemon pokemons, int nbr){
+        if (this.nbPokemon == 6){
+            this.pokemons[nbr] = pokemons;
+        } else {
+            this.pokemons[this.nbPokemon] = pokemons;
+            this.nbPokemon++;
+        }
+    }
+
+    public String printPokemon(){
+        String temp = "";
+        for (int i = 0; i < this.nbPokemon; i++) {
+            temp += pokemons[i].showPokemon() + "\n";
+        }
+        return temp;
     }
 
 }

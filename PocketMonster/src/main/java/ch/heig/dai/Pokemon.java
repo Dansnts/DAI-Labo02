@@ -67,7 +67,7 @@ public class Pokemon {
             System.out.println("Damage : ");
             int moveDamage = scanner.nextInt();
 
-            System.out.println("Is your move isung attack spe?: ");
+            System.out.println("Is your move using attack spe?: ");
             boolean moveIsung = scanner.nextBoolean();
 
             moveset.add(new Move(moveName,movePP,movePrecision,moveType,moveDamage,moveIsung));
@@ -86,11 +86,26 @@ public class Pokemon {
         System.out.println("Level : " + this.level);
         System.out.println("Moveset : ");
         for (Move move : this.moveset) {
-            move.printMove();
+            System.out.println(move.printMove());
         }
         System.out.println();
         System.out.println("----------------------------------------------");
 
+    }
+
+    public String showPokemon(){
+        String temp = "";
+        temp +="----------------------------------------------\n";
+        temp +=this.name + " #" + this.pokedexID +"\n";
+        temp +="Type : " + this.element.typeToString()+"\n";
+        temp +="Level : " + this.level+"\n";
+        temp +="Moveset : \n";
+        for (Move move : this.moveset) {
+            temp += move.printMove()+"\n";
+        }
+        temp += "\n";
+        temp +="----------------------------------------------\n";
+        return temp;
     }
 
     public String getName(){
