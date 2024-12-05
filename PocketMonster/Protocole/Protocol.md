@@ -60,6 +60,8 @@ The error code is an integer between 1 and 1 inclusive.
 The error code is as follow:
   - 1: The client is already in a battle.
 
+![JoinPossibleCombatsProblem](./JoinPossibleCombatsProblem.png)
+
 ### Check the pokédex
 The client wants to interact with the pokédex
 #### Request
@@ -87,6 +89,8 @@ POKEDEX ADD
 #### Responses
 - `enter the name...`: The server will ask question so that it can register the pokemon.
 
+![PokedexProblems](./PokedexProblems.png)
+
 ### Changing your team
 The client wants to change his team
 #### Request
@@ -109,6 +113,10 @@ change his bulbasaur for a herbizzare
 (ex. place 7 or 0)
   - 3: lacks a parameter
 
+![ChangeTeamCompositionProblems](./ChangeTeamCompositionProblems.png)
+
+
+
 ### Attack mid-fight
 During the combat the client wants to attack his ennemi
 #### Request
@@ -129,6 +137,10 @@ how much damage has been dealt.
   The error code is as follow:
   - 1: The pokemon doesn't have this move
   
+
+![AttackCombatProblem](./AttackCombatProblem.png)
+
+
 ### Change pokemon mid-fight
 During the combat the client wants to change hi active pokemon
 #### Request
@@ -148,6 +160,9 @@ the combat and send back the state of the fight to both clients.
   The error code is as follow:
   - 1: The pokemon is dead
   - 2: The pokemon isn't in your team
+
+![SwitchCombatProblem](./SwitchCombatProblem.png)
+
 
 ### Quit
 The client wants to quit

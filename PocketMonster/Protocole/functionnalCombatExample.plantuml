@@ -2,64 +2,64 @@
 title "fonctionnal example of how a combat takes place"
 participant "client 1" as c1
 participant "Server" as s
-participant "client 2" as giovanni
+participant "client 2" as Giovanni
 == JOIN possible combats ==
 
-c1->s: JOIN giovanni
+c1->s: JOIN Giovanni
 s->c1: OK
 
-s->giovanni: Beginning fight with Red
+s->Giovanni: Beginning fight with Red
 
 == SETUP of the combat ==
-s->c1: WELCOME TEAM(1.herbizzare, 2.carapuce)
-s->giovanni: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
-s->giovanni: WELCOME TEAM(1.miaous, 2.persian)
-s->c1: WELCOME ENNEMYTEAM(1.herbizzare, 2.carapuce)
-c1->s: SWITCH herbizzare
-giovanni->s: SWITCH miaous
-s->giovanni: Turn c1, herbizzare(60), miaous(40)
-s->c1: Turn c1, herbizzare(60), miaous(40)
+s->c1: WELCOME TEAM(1.Ivysaur, 2.Squirtle)
+s->Giovanni: WELCOME ENNEMYTEAM(1.Ivysaur, 2.Squirtle)
+s->Giovanni: WELCOME TEAM(1.Meowth, 2.persian)
+s->c1: WELCOME ENNEMYTEAM(1.Ivysaur, 2.Squirtle)
+c1->s: SWITCH Ivysaur
+Giovanni->s: SWITCH Meowth
+s->Giovanni: Turn c1, Ivysaur(60), Meowth(40)
+s->c1: Turn c1, Ivysaur(60), Meowth(40)
 
 
 === normal sequence of a turn ==
 == ATTACK ==
 c1->s: ATTACK
-s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+s->c1: ATTACK Ivysaur (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->giovanni: herbizzare dealt 30 damage
-s->c1: herbizzare dealt 30 damage
-s->c1: Turn giovanni, herbizzare(60), miaous(10)
-s->giovanni: Turn giovanni, herbizzare(60), miaous(10)
+s->Giovanni: Ivysaur dealt 30 damage
+s->c1: Ivysaur dealt 30 damage
+s->c1: Turn Giovanni, Ivysaur(60), Meowth(10)
+s->Giovanni: Turn Giovanni, Ivysaur(60), Meowth(10)
 
 
 == Switch ==
 c1->s: SWITCH
-s->c1: Your Team (current: herbizzare(60), carapuce(44))
-c1->s: SWITCH carapuce
-s->giovanni: red switched in carapuce
-s->c1: red switched in carapuce
-s->giovanni: Turn giovanni, carapuce(44), miaous(40)
-c1->s: Turn giovanni, carapuce(44), miaous(40)
+s->c1: Your Team (current: Ivysaur(60), Squirtle(44))
+c1->s: SWITCH Squirtle
+s->Giovanni: red switched in Squirtle
+s->c1: red switched in Squirtle
+s->Giovanni: Turn Giovanni, Squirtle(44), Meowth(40)
+c1->s: Turn Giovanni, Squirtle(44), Meowth(40)
 
 
 == EN cas de KO ==
 c1->s: ATTACK
-s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+s->c1: ATTACK Ivysaur (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->giovanni: herbizzare dealt 30 damage
-s->c1: herbizzare dealt 30 damage
-s->c1: Turn giovanni, herbizzare(60), miaous(0)
-s->giovanni: Turn giovanni, herbizzare(60), miaous(0)
-s->giovanni: Your Team(current: miaous, persian)
-giovanni->s: Switch persian
-s->c1: Turn giovanni, herbizzare(60), miaous(40)
-s->giovanni: Turn giovanni, herbizzare(60), miaous(40)
+s->Giovanni: Ivysaur dealt 30 damage
+s->c1: Ivysaur dealt 30 damage
+s->c1: Turn Giovanni, Ivysaur(60), Meowth(0)
+s->Giovanni: Turn Giovanni, Ivysaur(60), Meowth(0)
+s->Giovanni: Your Team(current: Meowth, persian)
+Giovanni->s: Switch persian
+s->c1: Turn Giovanni, Ivysaur(60), Meowth(40)
+s->Giovanni: Turn Giovanni, Ivysaur(60), Meowth(40)
 
 == En cas de ko final ==
 c1->s: ATTACK
-s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+s->c1: ATTACK Ivysaur (1.tackle 2.Strugle)
 c1->s: ATTACK Strugle
-s->giovanni: END c1, you lost
+s->Giovanni: END c1, you lost
 s->c1: END c1, you won
 
 @enduml

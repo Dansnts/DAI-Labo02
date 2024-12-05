@@ -6,7 +6,7 @@ participant "Server" as s
 
 == Join the server ==
 
-note over c1,giovanni
+note over c1
 The socket is instanciated and the connection is
 automatically established.
 end note

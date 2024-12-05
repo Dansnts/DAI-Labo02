@@ -4,12 +4,11 @@ title "Join possible combats problem"
 
 participant "client 1" as c1
 participant "Server" as s
-participant "client 2" as giovanni
-participant "client 3" as sacha
+participant "client 2" as Giovanni
 
 == Join the server ==
 
-note over c1,giovanni
+note over c1,Giovanni
 The socket is instanciated and the connection is
 automatically established.
 end note
@@ -20,24 +19,23 @@ c1<-->s : Connection established
 c1->s: LOGIN Red
 s->c1: OK
 
-giovanni->s: Establish connection
-giovanni<-->: Connection established
+Giovanni->s: Establish connection
 
-giovanni->s: LOGIN Giovanni
-s->giovanni: OK
+Giovanni->s: LOGIN Giovanni
+s->Giovanni: OK
 
 == List possible combats ==
 
 c1->s: JOIN
-s->c1: HOSTS giovanni
+s->c1: HOSTS Giovanni
 
 == JOIN possible combats ==
 
 c1->s: JOIN Giovanni
 s->c1: OK
 
-c1->giovanni: Establish connection
-c1<-->giovanni: Connection established
+c1->Giovanni: Establish connection
+c1<-->Giovanni: Connection established
 
 == JOIN a combats that isn't here ==
 
@@ -46,23 +44,23 @@ s->c1: ERROR 1
 
 == HOST possible combats ==
 
-giovanni->s: HOST
-s->giovanni: OK
-s->giovanni: RECEIVE matchmaking from Red
+Giovanni->s: HOST
+s->Giovanni: OK
+s->Giovanni: RECEIVE matchmaking from Red
 s->s: Remove Giovanni from Hosts
 
-giovanni->c1: Establish connection
-c1<-->giovanni: Connection established
+Giovanni->c1: Establish connection
+c1<-->Giovanni: Connection established
 
 == JOIN a combats when being an HOST ==
 c1->s: HOST
 s->c1: OK
 
-c1->s: JOIN giovanni
+c1->s: JOIN Giovanni
 s->c1: OK
 s->s: remove c1 from hosts
 
-c1->giovanni: Establish connection
-c1<-->giovanni: Connection established
+c1->Giovanni: Establish connection
+c1<-->Giovanni: Connection established
 
 @enduml
