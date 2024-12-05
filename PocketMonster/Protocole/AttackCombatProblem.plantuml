@@ -1,0 +1,21 @@
+@startuml AttackCombatProblem
+title "problem related to Attacks in combat"
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as giovanni
+
+== ATTACK ==
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK Strugle
+s->giovanni: herbizzare dealt 30 damage
+s->c1: herbizzare dealt 30 damage
+s->giovanni: Turn giovanni, herbizzare(60), miaous(10)
+s->c1: Turn giovanni, herbizzare(60), miaous(10)
+
+== ATTACK with the wrong attack ==
+c1->s: ATTACK
+s->c1: ATTACK herbizzare (1.tackle 2.Strugle)
+c1->s: ATTACK UltraLaser
+s->c1: ERROR 1
+@enduml
