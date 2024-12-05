@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  pokemon-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pokemon-server
+    ports:
+      - "28500:28500"
+    command: ["server"]
+    restart: unless-stopped
+
+  pokemon-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pokemon-client
+    ports:
+      - "28501:28501"
+    command: ["client"]
+    restart: unless-stopped
