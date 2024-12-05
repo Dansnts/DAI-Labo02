@@ -7,12 +7,21 @@ import java.util.*;
 
 import picocli.CommandLine;
 
+/**
+ * Server class that handles incoming client connections and manages Pokémon-related interactions.
+ * Provides a multithreaded architecture for handling multiple clients simultaneously.
+ */
 @CommandLine.Command(
         name = "server",
         description = "Starts the server."
 )
 public class Server implements Runnable {
 
+
+    /**
+     * Runs the server when executed as a command.
+     * Delegates to the {@code start} method to initialize the server.
+     */
     @Override
     public void run() {
         System.out.println("[Server] Starting...");
@@ -21,6 +30,11 @@ public class Server implements Runnable {
 
     private static final int PORT = 28500;
     private static final List<ClientHandler> clients = new ArrayList<>();
+
+    /**
+     * Starts the server and listens for incoming client connections.
+     * Initializes example Pokémon and Trainer data for testing purposes.
+     */
 
     // Main method to start the server
     public static void start() {
@@ -52,6 +66,12 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Broadcasts a message to all connected clients except the sender.
+     *
+     * @param message The message to be sent.
+     * @param sender  The client that sent the message.
+     */
     public static void broadcastMessage(String message, ClientHandler sender) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
@@ -63,6 +83,9 @@ public class Server implements Runnable {
         System.out.println("[DEBUG] Broadcasting message: " + message);
     }
 
+    /**
+     * Inner class that handles communication with a single client.
+     */
     private static class ClientHandler implements Runnable {
         private static ClientHandler[] lookingToFight = new ClientHandler[0];
         private final Socket socket;
@@ -72,6 +95,13 @@ public class Server implements Runnable {
         private Trainer trainer;
         private Pokedex pokedex;
 
+        /**
+         * Constructs a ClientHandler instance for a connected client.
+         *
+         * @param socket  The client's socket.
+         * @param trainer The trainer data associated with the client.
+         * @throws IOException If an I/O error occurs during initialization.
+         */
         ClientHandler(Socket socket, Trainer trainer) throws IOException {
             this.socket = socket;
             this.trainer = trainer;
@@ -80,6 +110,11 @@ public class Server implements Runnable {
             this.pokedex = new Pokedex();
         }
 
+
+        /**
+         * Handles client interaction in a separate thread.
+         * Processes client requests and manages server-client communication.
+         */
         @Override
         public void run() {
             try {
@@ -95,15 +130,11 @@ public class Server implements Runnable {
             }
         }
 
-        private void sendMenu() throws IOException {
-            out.write("[Server] Welcome to the Server!\n");
-            out.write("Choose an option:\n");
-            out.write("1. Start Chat\n");
-            out.write("2. Pokémon Menu\n");
-            out.write("Enter choice: \n");
-            out.flush();
-        }
-
+        /**
+         * Sends the Pokémon menu options to the client and processes their choice.
+         *
+         * @throws IOException If an I/O error occurs while communicating with the client.
+         */
         private void handlePokemonMenu() throws IOException {
             out.write("[Server] Welcome to the Server!\n");
             out.write("Choose an option:\n");
@@ -297,6 +328,9 @@ public class Server implements Runnable {
 
         }
 
+        /**
+         * Disconnects the client from the server and cleans up resources.
+         */
         private void disconnect() {
             try {
                 synchronized (clients) {
@@ -343,6 +377,11 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Main method to run the server.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         start();
     }
