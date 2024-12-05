@@ -22,7 +22,6 @@ public class Move {
 
     public Move parseMove(String data){
         System.out.println("MOVES : "+ data);
-
         return null;
     }
 

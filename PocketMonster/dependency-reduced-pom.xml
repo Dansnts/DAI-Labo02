@@ -18,7 +18,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>ch.heig.dai.Main</mainClass>
+                  <mainClass>ch.heig.dai.Root</mainClass>
                 </transformer>
                 <transformer>
                   <resource>MANIFEST.MF</resource>

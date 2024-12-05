@@ -16,6 +16,8 @@ enum Type {
     NONE;
 }
 
+
+
 public class Elements {
     Type type;
     Type weakness;

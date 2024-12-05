@@ -2,6 +2,8 @@ package ch.heig.dai;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -46,40 +48,7 @@ public class Pokedex {
 
                 // Parse Moveset from the 5th field, trimming outer {}
                 String movesData = info[4].trim();
-                movesData = movesData.substring(1);
-                String[] moveParts = movesData.split("}"); // Split by semicolon
-                ArrayList<Move> moveset = new ArrayList<>();
 
-                int moveSize = 6;
-                if (moveParts.length == moveSize) {
-                    // Create the Move object using the split parts
-                    moveset.add(new Move(moveParts[0],
-                            Integer.parseInt(moveParts[1]),
-                            Integer.parseInt(moveParts[2]),
-                            element.getType(moveParts[3]),
-                            Integer.parseInt(moveParts[4]),
-                            Boolean.parseBoolean(moveParts[5])));
-
-                    // Use the move object as needed
-                } else {
-                    System.out.println("Invalid move data.");
-                }
-
-                // Parse Stats from the 6th field, trimming outer {}
-                String statsData = info[5].trim();
-                statsData = statsData.substring(1);
-                String[] statsParts = statsData.split("}");
-
-                Stats stats = new Stats(Integer.parseInt(statsParts[0]), Integer.parseInt(statsParts[1])
-                        ,Integer.parseInt(statsParts[2]),Integer.parseInt(statsParts[3]),Integer.parseInt(statsParts[4])
-                        ,Integer.parseInt(statsParts[5]));
-
-                // Create a new Pokemon object and add it to the list
-                Pokemon pokemon = new Pokemon(id, name, level, element, moveset, stats);
-                System.out.println("Pokemon : ");
-                pokemon.printPokemon();
-                System.out.println();
-                pokemons.add(pokemon);
             }
 
             // Fermer le fichier après lecture

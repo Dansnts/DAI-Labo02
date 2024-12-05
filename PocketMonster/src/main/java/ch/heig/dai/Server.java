@@ -5,10 +5,21 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class Server {
+import picocli.CommandLine;
+
+@CommandLine.Command(
+        name = "server",
+        description = "Starts the server."
+)
+public class Server implements Runnable {
+
+    @Override
+    public void run() {
+        System.out.println("[Server] Starting...");
+        start(); // Appelle la méthode existante pour démarrer le serveur
+    }
 
     private static final int PORT = 28500;
-    public static final String ENDOFLINE = "\n";
     private static final List<ClientHandler> clients = new ArrayList<>();
 
     // Main method to start the server
@@ -179,7 +190,6 @@ public class Server {
                 case "QUIT":
                     disconnect();
                     break;
-
                 default:
                     sendMessage("[Server] Goodbye!");
             }
@@ -286,7 +296,6 @@ public class Server {
             }
 
         }
-
 
         private void disconnect() {
             try {
