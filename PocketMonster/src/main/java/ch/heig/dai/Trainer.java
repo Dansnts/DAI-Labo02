@@ -68,6 +68,10 @@ public class Trainer {
         return name;
     }
 
+    public int getNbPokemon(){
+        return this.nbPokemon;
+    }
+
     public void setPokemons(Pokemon pokemons, int nbr){
         if (this.nbPokemon == 6){
             this.pokemons[nbr] = pokemons;

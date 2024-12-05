@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Server {
 
-    private static final int PORT = 15100;
+    private static final int PORT = 28500;
     public static final String ENDOFLINE = "\n";
     private static final List<ClientHandler> clients = new ArrayList<>();
 
@@ -147,11 +147,23 @@ public class Server {
                             pokedex.printPokedex(out, in);
                             handlePokemonMenu();
                         }
-                        out.write("ERROR :you have too much parameters");
+                        if (parts.length == 2){
+                            pokedex.printPokemon(parts[1], out);
+                        } else {
+                            out.write("ERROR :you have too much parameters");
+                        }
                     }
                     break;
                 case "JOIN":
-                    setLookingToFight();
+                    if (parts.length == 2){
+                        challenge(parts[1]);
+                    } else {
+                        if (parts.length == 1){
+                            setLookingToFight();
+                        } else {
+                            out.write("ERROR :you have too many parameters");
+                        }
+                    }
                     break;
                 case "HOST":
                     // adding the client to the waiting list
@@ -260,24 +272,21 @@ public class Server {
                     out.write(i + ". " + lookingToFight[i] + "\n");
                 }
                 out.flush();
-                boolean notChosen = true;
-                while(notChosen){
-                    String message = in.readLine();
-
-                    try{
-                        int opponent = Integer.parseInt(message);
-                        notChosen = false;
-                        battling(this, lookingToFight[opponent]);
-
-                    } catch (NumberFormatException e){
-                        System.out.println("[Server] Invalid opponent. Please enter the number of the opponent you wish to fight.");
-                    }
-
-                }
             } catch (IOException e){
                 System.out.println("[Server] IO exception: " + e.getMessage());
             }
         }
+
+        private void challenge(String id) throws IOException {
+            try{
+                int opponent = Integer.parseInt(id);
+                battling(this, lookingToFight[opponent]);
+            } catch (NumberFormatException e){
+                out.write("ERROR Invalid opponent. Please enter the number of the opponent you wish to fight.");
+            }
+
+        }
+
 
         private void disconnect() {
             try {

@@ -313,4 +313,75 @@ public class Pokedex {
         }
     }
 
+    public void printPokemon(String name , BufferedWriter out) throws IOException {
+        boolean found = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains(name)) { // Rechercher le Pokémon par son nom
+                    found = true;
+                    System.out.println(line);
+                    // Split by ';' to get primary fields of the Pokemon data
+                    String[] info = line.split(";");
+
+                    // Parse ID, Name, Level
+                    int id = Integer.parseInt(info[0]);
+                    String namePokemon = info[1];
+                    int level = Integer.parseInt(info[2]);
+
+                    // Parse Elements from the 4th field, trimming outer {}
+                    String elementsData = info[3];
+                    elementsData = elementsData.substring(1, elementsData.length() - 1);
+                    Elements element = new Elements(elementsData);
+
+
+                    // If you want to implement pokemon in the data base with more than one ability this code is bound to change because the split split all and not only between the { in the string
+                    String movesData = info[4];
+                    movesData = movesData.substring(1, movesData.length() - 1);
+                    String[] moveParts = movesData.split(";"); // Split by semicolon
+                    ArrayList<Move> moveset = new ArrayList<>();
+
+                    int moveSize = 6;
+                    //if (moveParts.length == moveSize) {
+                    // Create the Move object using the split parts
+                    moveset.add(new Move(info[4].substring(1),
+                            Integer.parseInt(info[5]),
+                            Integer.parseInt(info[6]),
+                            element.getType(info[7]),
+                            Integer.parseInt(info[8]),
+                            Boolean.parseBoolean(info[9].substring(0,info[9].length()-1))));
+
+                    // Use the move object as needed
+                    // } else {
+                    //System.out.println("Invalid move data.");
+                    //}
+
+                    moveset.get(0).printMove();
+
+                    // Parse Stats from the 6th field, trimming outer {}
+                    String statsData = info[10];
+                    System.out.println(statsData);
+                    String statsDataTrimed = statsData.substring(1, statsData.length() - 1);
+                    String[] statsParts = statsDataTrimed.split(",");
+
+                    Stats stats = new Stats(Integer.parseInt(statsParts[0]), Integer.parseInt(statsParts[1])
+                            ,Integer.parseInt(statsParts[2]),Integer.parseInt(statsParts[3]),Integer.parseInt(statsParts[4])
+                            ,Integer.parseInt(statsParts[5]));
+
+                    // Create a new Pokemon object and add it to the list
+                    Pokemon pokemon = new Pokemon(id, name, level, element, moveset, stats);
+                    out.write(pokemon.showPokemon());
+                    out.write("\n");
+                    out.flush();
+                }
+            }
+            if (!found) {
+                out.write("ERROR the pokemon isnt in the database");
+                out.flush();
+            }
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+        }
+    }
+
 }

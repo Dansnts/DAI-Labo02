@@ -34,4 +34,14 @@ public class Stats {
     public int getSpecial() {
         return special;
     }
+
+    public String printStats() {
+        String temp = "";
+        temp += "HP: " + hp + "\n";
+        temp += "ATTACK: " + attack + "\n";
+        temp += "DEFENSE: " + defense + "\n";
+        temp += "SPECIAL: " + special + "\n";
+        temp += "SPEED: " + speed + "\n";
+        return temp;
+    }
 }

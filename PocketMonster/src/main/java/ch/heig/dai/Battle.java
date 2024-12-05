@@ -77,13 +77,13 @@ public class Battle {
             turn = !turn;
             this.turnNumber++;
         }
-
+        end();
     }
 
     private void fightSetup(BufferedWriter out, BufferedReader in, Pokemon[] pokeTeam) throws IOException {
         out.write("The battle is starting you may choose your active pokemon" + ENDOFLINE);
         out.write("Here is your team:" + ENDOFLINE);
-        for (int i = 0; i < pokeTeam.length; i++) {
+        for (int i = 0; i < trainer.getNbPokemon(); i++) {
             out.write(i + ". " + pokeTeam[i].getName() + ENDOFLINE);
         }
         out.flush();
@@ -194,7 +194,7 @@ public class Battle {
     private void change (String pokemon) throws IOException {
         int healthCount = 0;
         boolean changed = false;
-        for (int i = 0; i < pokeTeam.length; i++) {
+        for (int i = 0; i < trainer.getNbPokemon(); i++) {
             if (pokeTeam[i].getName().equals(pokemon) && pokeTeam[i].actualHealth != 0) {
                 activePokemon = pokeTeam[i];
                 changed = true;
@@ -224,8 +224,8 @@ public class Battle {
 
     private void changeNoEntry () throws IOException {
         out.write("here is your team:" + ENDOFLINE);
-        for (Pokemon pokemon : pokeTeam) {
-            out.write(pokemon.getName() + ENDOFLINE);
+        for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+            out.write(pokeTeam[i].getName() + ENDOFLINE);
         }
         out.flush();
         turnChoice();
@@ -288,12 +288,12 @@ public class Battle {
     private void pokemonDead () throws IOException {
         outEnnemy.write(activePokemonEnnemy.getName() + " is dead" + ENDOFLINE);
         int nbrDead = 0;
-        for (Pokemon pokemon : pokeTeam) {
-            if (pokemon.actualHealth <= 0){
+        for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+            if (pokeTeam[i].actualHealth <= 0){
                 nbrDead++;
             }
         }
-        if (nbrDead == pokeTeam.length){
+        if (nbrDead == trainerEnnemy.getNbPokemon()){
             outEnnemy.write("All your team is dead you have lost" + ENDOFLINE);
             out.write("The ennemy team is dead. GG you have win" + ENDOFLINE);
             outEnnemy.flush();
@@ -303,13 +303,13 @@ public class Battle {
             boolean hasSelected = false;
             while (!hasSelected){
                 outEnnemy.write("Here is your team, please select an alive pokemon to put in the active place:" + ENDOFLINE);
-                for (Pokemon pokemon : pokeTeamEnnemy) {
-                    outEnnemy.write(pokemon.getName() + ENDOFLINE);
+                for (int i= 0; i < trainerEnnemy.getNbPokemon(); i++) {
+                    outEnnemy.write(pokeTeamEnnemy[i].getName() + ENDOFLINE);
                 }
                 String pokemon = inEnnemy.readLine();
                 int healthCount = 0;
                 boolean changed = false;
-                for (int i = 0; i < pokeTeamEnnemy.length; i++) {
+                for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
                     if (pokeTeamEnnemy[i].getName().equals(pokemon) && pokeTeamEnnemy[i].actualHealth > 0) {
                         activePokemonEnnemy = pokeTeamEnnemy[i];
                         changed = true;
@@ -337,6 +337,14 @@ public class Battle {
                     }
                 }
             }
+        }
+    }
+    public void end () throws IOException {
+        for (int i = 0; i < trainerEnnemy.getNbPokemon(); i++) {
+            pokeTeamEnnemy[i].actualHealth = pokeTeamEnnemy[i].getStats().getHp();
+        }
+        for (int i = 0; i < trainer.getNbPokemon(); i++) {
+            pokeTeam[i].actualHealth = pokeTeam[i].getStats().getHp();
         }
     }
 }

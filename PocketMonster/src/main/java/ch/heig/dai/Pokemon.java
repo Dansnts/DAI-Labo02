@@ -99,6 +99,7 @@ public class Pokemon {
         temp +=this.name + " #" + this.pokedexID +"\n";
         temp +="Type : " + this.element.typeToString()+"\n";
         temp +="Level : " + this.level+"\n";
+        temp +="Stats : " + this.stats.printStats() + "\n";
         temp +="Moveset : \n";
         for (Move move : this.moveset) {
             temp += move.printMove()+"\n";
