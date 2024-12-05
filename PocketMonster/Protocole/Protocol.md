@@ -68,7 +68,7 @@ POKEDEX <name>
 ```
 - `<name>`: The name of the pokémon you want to see
 #### Responses
-- `#1 bulbasaur,...`:The client didn't specify any name so the 
+- `- bulbasaur,...`:The client didn't specify any name so the 
 server sends him the list of all the pokémon currently in the 
 pokédex
 - `STATS <name> <types> <stats>`:The client asked to see a pokémon that 
@@ -82,20 +82,14 @@ The error code is as follow:
 The client wants to add a pokémon to the actual pokédex
 #### Request
 ```
-POKEDEX ADD <name> <types> <stats> 
+POKEDEX ADD  
 ```
-- `<name>`: The name of the pokémon
-- `<types`: The types of the pokémon
-- `<stats>`: The stats of the pokémon
 #### Responses
-- `OK`: The pokémon is registered in the pokédex.
+- `enter the name...`: The server will ask question so that it can register the pokemon.
 - `ERROR <code>`:an error occurred while sending the message.
 The error code is an integer between 1 and 2 inclusive.
 The error code is as follow:
-  - 1: The pokémon already exists in the pokédex
-  - 2: The pokémon is missing stats 
-  - 3: The pokémon is missing a name
-  - 4: The pokémon is missing a type
+  - 1: Too much parameter
 
 ### Changing your team
 The client wants to change his team
@@ -117,6 +111,7 @@ change his bulbasaur for a herbizzare
   - 1: The pokémon wanted doesn't exist
   - 2: The place the pokémon is wanted isnt allowed
 (ex. place 7 or 0)
+  - 3: lacks a parameter
 
 ### Attack mid-fight
 During the combat the client wants to attack his ennemi
@@ -129,12 +124,10 @@ ATTACK <move>
 - `ATTACK herbasaur (1.tackle, 2.strugle,...`: The client didn't 
 send any attack for the active pokémon so the server shows him 
 the different moves that the active pokemon can do
-- `TURN <ennemi>, result of attack, <state of the active pokemon>`: 
+- `the <pokemon> has/hasn't hit and dealt <number> damage`: 
 The client entered a legitimate move that his active pokemon can do. 
-The server then determines if the attack hits and then send back 
-the state of the fight to both clients(here is where we notify the 
-clients if the fight ends because all pokemon from the ennemy 
-are dead).
+The server then determines if the attack hits and tells both client
+how much damage has been dealt.
 - `ERROR <code>`:an error occurred while sending the message.
   The error code is an integer between 1 and 2 inclusive.
   The error code is as follow:
@@ -151,8 +144,7 @@ CHANGE <pokémon>
 - `YOUR team (1.herbizzare, 2.carapuce,..`: The client didn't 
 send any pokemon to switch in so the server shows him the state 
 of his actual team
-- `Turn <ennemi>, <switch out pokemon> -> <switch in pokemon>, 
-<state of the active pokemons>`: The client entered a pokemon 
+- `the client has switched his pokemon for <pokemon>`: The client entered a pokemon 
 that is not dead and is in the team, the server then actualise 
 the combat and send back the state of the fight to both clients.
 - `ERROR <code>`:an error occurred while sending the message.
