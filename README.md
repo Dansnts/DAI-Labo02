@@ -84,6 +84,7 @@ Here you can find a schema explaining which command you can use before a fight:
 Here you can find a schema explaining which command you can use mid-fight:
     -**ATTACK "move"** so that the active pokemon use the move on the ennemy
     -**Switch "pokemon"** to switched in the pokemon that you want
+    
 ![Combat](Protocole/functionnalCombatExample.png)
 ### Run as Server
 
