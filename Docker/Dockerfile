@@ -2,10 +2,8 @@ FROM eclipse-temurin:21
 
 WORKDIR /app
 
-COPY app.jar /app/application.jar
+COPY ./PokemonOctogoneEdition-1.0.jar /app/PokemonOctogoneEdition-1.0.jar
 
-EXPOSE 15100
+EXPOSE 28500
 
-ENTRYPOINT ["java", "-jar", "application.jar"]
-
-CMD ["server"]
+ENTRYPOINT ["java", "-jar", "PokemonOctogoneEdition-1.0.jar"]

@@ -1,0 +1,27 @@
+@startuml switchCombatProblem
+title "Problems related to switching in a combat"
+participant "client 1" as c1
+participant "Server" as s
+participant "client 2" as Giovanni
+== Switch ==
+c1->s: SWITCH
+s->c1: Your Team (current: Ivysaur(60), Squirtle(44))
+c1->s: SWITCH Squirtle
+s->Giovanni:Squirtle(44), Meowth(40)
+s->c1:Squirtle(44), Meowth(40)
+s->Giovanni: Turn Giovanni
+s->c1: Turn Giovanni
+
+== Switch with wrong pokemon ==
+c1->s: SWITCH
+s->c1: Your Team (current: Ivysaur(60), Squirtle(44))
+c1->s: SWITCH dracaufeu
+s->c1: ERROR 2
+
+== Switch with a dead pokemon ==
+c1->s: SWITCH
+s->c1: Your Team (current: Ivysaur(60), Squirtle(dead))
+c1->s: SWITCH Squirtle
+s->c1: ERROR 1
+
+@enduml

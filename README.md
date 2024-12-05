@@ -7,16 +7,22 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Run as Server](#run-as-server)
-  - [Run as Client](#run-as-client)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Pokémon Octogone Edition](#pokémon-octogone-edition)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Run as Server](#run-as-server)
+    - [Run as Client](#run-as-client)
+    - [Docker](#docker)
+      - [Server](#server)
+      - [Client](#client)
+  - [Project Structure](#project-structure)
+  - [Contributing](#contributing)
+    - [How to Contribute](#how-to-contribute)
+  - [License](#license)
 
 ---
 
@@ -65,7 +71,20 @@ This project serves as an educational example of implementing **distributed syst
 ## Usage
 
 The game can be executed in either **server mode** or **client mode** using the generated JAR file.
+Here you can find a schema explaining which command you can use before a fight:
+    -**JOIN "serveruserid"** to challeng someone that is waiting to fight, or get the list of people waiting to fight if no id is entered
+    -**HOST** to wait for someone to challenge you
+    -**POKEDEX "pokemon"** to see all the pokemon, or a specific pokemon
+    -**POKEDEX ADD** to add a specific pokemon to the database
+    -**CHANGE "number" "pokemon"** to swap the place of the pokemon in your team with the number with the pokemon that you want
+    -**QUIT** to quit the communication
+![Example](Protocole/functionnal-example.png)
 
+
+Here you can find a schema explaining which command you can use mid-fight:
+    -**ATTACK "move"** so that the active pokemon use the move on the ennemy
+    -**Switch "pokemon"** to switched in the pokemon that you want
+![Combat](Protocole/functionnalCombatExample.png)
 ### Run as Server
 
 For now you can simply run the jar with the 'client' or 'server' argument.
