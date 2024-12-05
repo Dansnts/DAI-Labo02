@@ -68,6 +68,8 @@ The game can be executed in either **server mode** or **client mode** using the 
 
 ### Run as Server
 
+For now you can simply run the jar with the 'client' or 'server' argument.
+
 Start the server by executing:
 ```bash
 java -jar target/pkmOctogoneEdition.jar -server
@@ -81,6 +83,18 @@ Connect to the server by executing:
 ```bash
 java -jar target/pkmOctogoneEdition.jar -client
 ```
+
+### Docker
+You can run the program with the commands :
+#### Server
+```bash
+docker compose up pokemon-server                                                      
+```
+#### Client
+```bash
+docker compose up pokemon-client                                                       
+```
+
 
 ---
 
