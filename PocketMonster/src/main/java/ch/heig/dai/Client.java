@@ -22,7 +22,7 @@ public class Client implements Runnable {
     }
 
     private static final String SERVER_ADDRESS = "localhost";  // Adresse du serveur
-    private static final int SERVER_PORT = 15100;             // Port du serveur
+    private static final int SERVER_PORT = 28500;             // Port du serveur
 
     public static void start() {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {

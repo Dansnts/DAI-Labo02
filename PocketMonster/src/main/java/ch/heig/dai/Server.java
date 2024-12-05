@@ -19,7 +19,7 @@ public class Server implements Runnable {
         start(); // Appelle la méthode existante pour démarrer le serveur
     }
 
-    private static final int PORT = 15100;
+    private static final int PORT = 28500;
     private static final List<ClientHandler> clients = new ArrayList<>();
 
     // Main method to start the server
@@ -29,11 +29,13 @@ public class Server implements Runnable {
 
             // Example Pokémon and Trainer setup (can be replaced with actual logic)
             Stats stats = new Stats(17, 15, 20, 25, 13, 100);
+            Stats stats2 = new Stats(17, 50, 20, 25, 13, 150);
             Elements element = new Elements("GRASS");
             ArrayList<Move> moveset = new ArrayList<>();
-            moveset.add(new Move("Tackle", 20, 95, Type.NORMAL));
+            moveset.add(new Move("Tackle", 20, 95, Type.NORMAL, 20, false));
             Pokemon bulbasaur = new Pokemon(1, "Bulbasaur", 5, element, moveset, stats);
-            Pokemon[] pokemons = new Pokemon[]{bulbasaur};
+            Pokemon herbizzare = new Pokemon(1, "herbizzare", 5, element, moveset, stats2);
+            Pokemon[] pokemons = new Pokemon[]{bulbasaur, herbizzare};
             Trainer defaultTrainer = new Trainer(348766483, "Red", pokemons, 10000);
 
             while (true) {
@@ -62,17 +64,20 @@ public class Server implements Runnable {
     }
 
     private static class ClientHandler implements Runnable {
+        private static ClientHandler[] lookingToFight = new ClientHandler[0];
         private final Socket socket;
         private final BufferedReader in;
         private final BufferedWriter out;
         private String clientName;
         private Trainer trainer;
+        private Pokedex pokedex;
 
         ClientHandler(Socket socket, Trainer trainer) throws IOException {
             this.socket = socket;
             this.trainer = trainer;
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
+            this.pokedex = new Pokedex();
         }
 
         @Override
@@ -81,27 +86,7 @@ public class Server implements Runnable {
                 boolean isRunning = true;
 
                 while (isRunning) {
-                    sendMenu();
-                    String choice = in.readLine();
-
-                    System.out.println("[DEBUG] Received input: '" + choice + "'");
-
-                    if (choice == null || choice.trim().isEmpty()) {
-                        sendMessage("[Server] Invalid input. Please try again.");
-                        continue;
-                    }
-
-                    switch (choice.trim()) {
-                        case "1":
-                            startChat();
-                            break;
-                        case "2":
-                            handlePokemonMenu();
-                            break;
-                        default:
-                            sendMessage("[Server] Invalid choice. Please enter '1' or '2'.");
-                            break;
-                    }
+                    handlePokemonMenu();
                 }
             } catch (IOException e) {
                 System.out.println("[Server] IO exception with client: " + e.getMessage());
@@ -120,28 +105,90 @@ public class Server implements Runnable {
         }
 
         private void handlePokemonMenu() throws IOException {
-            out.write("[Server] Pokémon Menu\n");
+            out.write("[Server] Welcome to the Server!\n");
             out.write("Choose an option:\n");
-            out.write("1. Add Pokémon\n");
-            out.write("2. Remove Pokémon\n");
-            out.write("3. Make Team\n");
-            out.write("4. Show Pokedex\n");
-            out.write("5. Exit\n");
+            out.write("POKEDEX <pokemon>: Show Pokedex or the entry for a pokemon\n");
+            out.write("POKEDEX ADD <pokemon>: Adds a pokemon to the pokedex\n");
+            out.write("JOIN <username>: Show list of poeple waiting to battle or challenge someone \n");
+            out.write("HOST: makes you wait for someone to challenge you\n");
+            out.write("CHANGE <number> <pokemon>: Show you your team or switch the 'number'-ième pokemon par 'pokemon'\n");
+            out.write("QUIT\n");
             out.flush();
 
             String choice = in.readLine();
-            switch (choice) {
+            String[] parts = choice.split(" ", 3);
+            switch (parts[0]) {
                 case "1":
                     startChat();
                     break;
                 case "2":
                     removePokemon();
                     break;
-                case "3":
+                case "CHANGE":
+                    if (parts.length == 1){
+                        out.write(trainer.printPokemon());
+                    } else {
+                        if (parts.length == 3){
+                            out.write("OK");
+                            Pokemon pokemon = pokedex.getPokemon(parts[2]);
+                            if (pokemon != null){
+                                if (Integer.parseInt(parts[1]) >= 1 || Integer.parseInt(parts[1]) <= 6 ){
+                                    trainer.setPokemons(pokemon,Integer.parseInt(parts[1]) - 1);
+
+                                } else {
+                                    out.write("ERROR: please put a number between 1 and 6.");
+                                }
+                            } else {
+                                out.write("ERROR " + parts[2] + " is not in the database please ask for another pokemon or create him");
+                            }
+                        } else {
+                            out.write("ERROR :you lack one parameter");
+                            out.flush();
+                            handlePokemonMenu();
+                        }
+                    }
                     makeTeam();
                     break;
-                case "4":
-                    showPokedex();
+                case "POKEDEX":
+                    if (parts.length == 2 && parts[1].equalsIgnoreCase("ADD")){
+                        pokedex.addPokedex(out, in);
+                        handlePokemonMenu();
+                    } else {
+                        if (parts.length == 1){
+                            pokedex.printPokedex(out, in);
+                            handlePokemonMenu();
+                        }
+                        if (parts.length == 2){
+                            pokedex.printPokemon(parts[1], out);
+                        } else {
+                            out.write("ERROR :you have too much parameters");
+                        }
+                    }
+                    break;
+                case "JOIN":
+                    if (parts.length == 2){
+                        challenge(parts[1]);
+                    } else {
+                        if (parts.length == 1){
+                            setLookingToFight();
+                        } else {
+                            out.write("ERROR :you have too many parameters");
+                        }
+                    }
+                    break;
+                case "HOST":
+                    // adding the client to the waiting list
+                    ClientHandler[] temp = new ClientHandler[lookingToFight.length + 1];
+                    for (int i = 0; i < lookingToFight.length; i++) {
+                        temp[i] = lookingToFight[i];
+                    }
+                    temp[lookingToFight.length] = this;
+                    lookingToFight = temp;
+                    waitingToFight();
+                    break;
+
+                case "QUIT":
+                    disconnect();
                     break;
                 default:
                     sendMessage("[Server] Goodbye!");
@@ -210,6 +257,46 @@ public class Server implements Runnable {
             }
         }
 
+        private void waitingToFight() throws IOException {
+            boolean iswaiting = true;
+            out.write("You are currently waiting for an opponent, if you want to stop waiting enter 1\n");
+            out.flush();
+            while (iswaiting) {
+                out.flush();
+                // wait and if he enters something to maybe quit he can but the server won't wait for a response.
+                if (in.ready()){
+                    if (Objects.equals(in.readLine(), "1") ){
+                        // changing the waiting to make sure the client isn't here no more
+                        lookingToFight = delete(this);
+                        iswaiting = false;
+                    }
+                }
+            }
+        }
+
+        private void setLookingToFight (){
+            try{
+                out.write("[Server] Looking to fight?\n");
+                out.write("Choose your opponent:\n");
+                for (int i = 0; i < lookingToFight.length; i++) {
+                    out.write(i + ". " + lookingToFight[i] + "\n");
+                }
+                out.flush();
+            } catch (IOException e){
+                System.out.println("[Server] IO exception: " + e.getMessage());
+            }
+        }
+
+        private void challenge(String id) throws IOException {
+            try{
+                int opponent = Integer.parseInt(id);
+                battling(this, lookingToFight[opponent]);
+            } catch (NumberFormatException e){
+                out.write("ERROR Invalid opponent. Please enter the number of the opponent you wish to fight.");
+            }
+
+        }
+
         private void disconnect() {
             try {
                 synchronized (clients) {
@@ -220,8 +307,39 @@ public class Server implements Runnable {
                 }
                 socket.close();
             } catch (IOException e) {
-                System.out.println("[Server] Error closing socket for client:  " + e.getMessage());
+                System.out.println("[Server] Error closing socket for client: " + e.getMessage());
             }
+        }
+
+        private void battling(ClientHandler first, ClientHandler second) throws IOException {
+            lookingToFight = delete(second);
+            Battle fight = new Battle(first.in, first.out, first.trainer, second.in, second.out, second.trainer);
+            fight.fighting();
+            second.out.write("Because you were waiting for a fight before you will be put again, enter 1 to quit");
+            ClientHandler[] temp = new ClientHandler[lookingToFight.length + 1];
+            for (int i = 0; i < lookingToFight.length; i++) {
+                temp[i] = lookingToFight[i];
+            }
+            temp[lookingToFight.length] = second;
+            lookingToFight = temp;
+
+        }
+
+        private ClientHandler[] delete(ClientHandler client){
+            boolean passed = false;
+            ClientHandler[] temp = new ClientHandler[lookingToFight.length - 1];
+            for (int i = 0; i < lookingToFight.length; i++) {
+                if (lookingToFight[i] == client) {
+                    passed = true;
+                } else {
+                    if (passed){
+                        temp[i - 1] = lookingToFight[i];
+                    } else {
+                        temp[i] = lookingToFight[i];
+                    }
+                }
+            }
+            return temp;
         }
     }
 

@@ -16,4 +16,32 @@ public class Stats {
         this.special = special;
         this.speed = speed;
     }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+    public int getDefense() {
+        return defense;
+    }
+    public int getSpecial() {
+        return special;
+    }
+
+    public String printStats() {
+        String temp = "";
+        temp += "HP: " + hp + "\n";
+        temp += "ATTACK: " + attack + "\n";
+        temp += "DEFENSE: " + defense + "\n";
+        temp += "SPECIAL: " + special + "\n";
+        temp += "SPEED: " + speed + "\n";
+        return temp;
+    }
 }
